@@ -1,0 +1,138 @@
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\appsettings.Development.json
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\appsettings.json
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.exe
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.deps.json
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.runtimeconfig.json
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.pdb
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\EPPlus.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Humanizer.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.Identity.Client.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IO.RecyclableMemoryStream.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.OpenApi.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Quartz.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\RestSharp.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Drawing.Common.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Runtime.Caching.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Security.Permissions.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Windows.Extensions.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Xml.XPath.XmlDocument.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.csproj.AssemblyReference.cache
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.GeneratedMSBuildEditorConfig.editorconfig
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.AssemblyInfoInputs.cache
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.AssemblyInfo.cs
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.csproj.CoreCompileInputs.cache
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.MvcApplicationPartsAssemblyInfo.cs
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.MvcApplicationPartsAssemblyInfo.cache
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\staticwebassets.build.json
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\staticwebassets.development.json
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\scopedcss\bundle\QuanLyChiPhi.styles.css
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.csproj.CopyComplete
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\refint\QuanLyChiPhi.dll
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.pdb
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.genruntimeconfig.cache
+D:\Cty\TIC Quản lý chi phí (TIC- Total Investment and Cost)\tic\QuanLyChiPhi\obj\Debug\net6.0\ref\QuanLyChiPhi.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\appsettings.Development.json
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\appsettings.json
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.exe
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.deps.json
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.runtimeconfig.json
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\QuanLyChiPhi.pdb
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\EPPlus.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Humanizer.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.Identity.Client.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.IO.RecyclableMemoryStream.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.OpenApi.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Newtonsoft.Json.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Quartz.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\RestSharp.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Drawing.Common.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Runtime.Caching.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Security.Permissions.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Windows.Extensions.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\System.Xml.XPath.XmlDocument.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+F:\HarmonyES\tic\QuanLyChiPhi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.csproj.AssemblyReference.cache
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.GeneratedMSBuildEditorConfig.editorconfig
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.AssemblyInfoInputs.cache
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.AssemblyInfo.cs
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.csproj.CoreCompileInputs.cache
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.MvcApplicationPartsAssemblyInfo.cs
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.MvcApplicationPartsAssemblyInfo.cache
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\staticwebassets.build.json
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\staticwebassets.development.json
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\scopedcss\bundle\QuanLyChiPhi.styles.css
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.csproj.CopyComplete
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.dll
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\refint\QuanLyChiPhi.dll
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.pdb
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\QuanLyChiPhi.genruntimeconfig.cache
+F:\HarmonyES\tic\QuanLyChiPhi\obj\Debug\net6.0\ref\QuanLyChiPhi.dll
