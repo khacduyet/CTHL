@@ -53,20 +53,30 @@ namespace QuanLyChiPhi.Model
                 ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
                 try
                 {
-                    var checkMa = _dbContext.ChungCu.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
-                    if (checkMa != null)
-                    {
-                        msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
-                        trans.Rollback();
-                        return msg;
-                    }
+
                     if (string.IsNullOrEmpty(data.Id))
                     {
+                        var checkMa = _dbContext.ChungCu.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         data.Id = Guid.NewGuid().ToString();
                         _dbContext.Add(data);
                     }
                     else
+                    {
+                        var checkMa = _dbContext.ChungCu.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma && x.Id != data.Id);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         _dbContext.Update(data);
+                    }
                     _dbContext.SaveChanges();
                     trans.Commit();
                     return msg;
@@ -125,20 +135,29 @@ namespace QuanLyChiPhi.Model
                 ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
                 try
                 {
-                    var checkMa = _dbContext.LoaiDichVu.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
-                    if (checkMa != null)
-                    {
-                        msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
-                        trans.Rollback();
-                        return msg;
-                    }
                     if (string.IsNullOrEmpty(data.Id))
                     {
+                        var checkMa = _dbContext.LoaiDichVu.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         data.Id = Guid.NewGuid().ToString();
                         _dbContext.Add(data);
                     }
                     else
+                    {
+                        var checkMa = _dbContext.LoaiDichVu.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma && x.Id != data.Id);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         _dbContext.Update(data);
+                    }
                     _dbContext.SaveChanges();
                     trans.Commit();
                     return msg;
@@ -197,20 +216,30 @@ namespace QuanLyChiPhi.Model
                 ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
                 try
                 {
-                    var checkMa = _dbContext.LoaiXe.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
-                    if (checkMa != null)
-                    {
-                        msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
-                        trans.Rollback();
-                        return msg;
-                    }
+                    
                     if (string.IsNullOrEmpty(data.Id))
                     {
+                        var checkMa = _dbContext.LoaiXe.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         data.Id = Guid.NewGuid().ToString();
                         _dbContext.Add(data);
                     }
                     else
+                    {
+                        var checkMa = _dbContext.LoaiXe.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma && x.Id != data.Id);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         _dbContext.Update(data);
+                    }
                     _dbContext.SaveChanges();
                     trans.Commit();
                     return msg;
@@ -269,20 +298,30 @@ namespace QuanLyChiPhi.Model
                 ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
                 try
                 {
-                    var checkMa = _dbContext.PhuongTien.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
-                    if (checkMa != null)
-                    {
-                        msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
-                        trans.Rollback();
-                        return msg;
-                    }
+
                     if (string.IsNullOrEmpty(data.Id))
                     {
+                        var checkMa = _dbContext.PhuongTien.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         data.Id = Guid.NewGuid().ToString();
                         _dbContext.Add(data);
                     }
                     else
+                    {
+                        var checkMa = _dbContext.PhuongTien.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma && x.Id != data.Id);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         _dbContext.Update(data);
+                    }
                     _dbContext.SaveChanges();
                     trans.Commit();
                     return msg;
@@ -341,20 +380,29 @@ namespace QuanLyChiPhi.Model
                 ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
                 try
                 {
-                    var checkMa = _dbContext.LoaiDongPhi.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
-                    if (checkMa != null)
-                    {
-                        msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
-                        trans.Rollback();
-                        return msg;
-                    }
                     if (string.IsNullOrEmpty(data.Id))
                     {
+                        var checkMa = _dbContext.LoaiDongPhi.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         data.Id = Guid.NewGuid().ToString();
                         _dbContext.Add(data);
                     }
                     else
+                    {
+                        var checkMa = _dbContext.LoaiDongPhi.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma && x.Id != data.Id);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         _dbContext.Update(data);
+                    }
                     _dbContext.SaveChanges();
                     trans.Commit();
                     return msg;
@@ -429,16 +477,15 @@ namespace QuanLyChiPhi.Model
                 ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
                 try
                 {
-                    var checkMa = _dbContext.CanHo.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
-                    if (checkMa != null)
-                    {
-                        msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
-                        trans.Rollback();
-                        return msg;
-                    }
-
                     if (string.IsNullOrEmpty(data.Id))
                     {
+                        var checkMa = _dbContext.CanHo.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         data.Id = Guid.NewGuid().ToString();
                         _dbContext.Add(data);
                         List<CanHo_PhuongTien> News = data.PhuongTiens.Select(x =>
@@ -454,6 +501,14 @@ namespace QuanLyChiPhi.Model
                     }
                     else
                     {
+                        var checkMa = _dbContext.CanHo.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma && x.Id != data.Id);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
+
                         var canho_phuongtien = _dbContext.CanHo_PhuongTien.Where(x => x.IdCanHo == data.Id).ToList();
                         _dbContext.RemoveRange(canho_phuongtien);
                         List<CanHo_PhuongTien> News = data.PhuongTiens.Select(x =>
@@ -547,21 +602,27 @@ namespace QuanLyChiPhi.Model
                 ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
                 try
                 {
-                    var checkMa = _dbContext.XeNgoai.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
-                    if (checkMa != null)
-                    {
-                        msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
-                        trans.Rollback();
-                        return msg;
-                    }
-
                     if (string.IsNullOrEmpty(data.Id))
                     {
+                        var checkMa = _dbContext.XeNgoai.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         data.Id = Guid.NewGuid().ToString();
                         _dbContext.Add(data);
                     }
                     else
                     {
+                        var checkMa = _dbContext.XeNgoai.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma && x.Id != data.Id);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                            trans.Rollback();
+                            return msg;
+                        }
                         _dbContext.Update(data);
                     }
                     _dbContext.SaveChanges();

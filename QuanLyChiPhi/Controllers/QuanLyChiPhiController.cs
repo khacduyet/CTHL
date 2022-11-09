@@ -44,7 +44,7 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         [HttpPost("SetChungCu")]
-        public async Task<IActionResult> SetChungCu(ChungCu data)
+        public async Task<IActionResult> SetChungCu([FromBody]ChungCu data)
         {
             CurrentUser currUser = GetRequest("SetChungCu");
             if (!string.IsNullOrEmpty(currUser.Id))
@@ -99,7 +99,7 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         [HttpPost("SetLoaiDichVu")]
-        public async Task<IActionResult> SetLoaiDichVu(LoaiDichVu data)
+        public async Task<IActionResult> SetLoaiDichVu([FromBody] LoaiDichVu data)
         {
             CurrentUser currUser = GetRequest("SetLoaiDichVu");
             if (!string.IsNullOrEmpty(currUser.Id))
@@ -126,7 +126,7 @@ namespace QuanLyChiPhi.Controllers
         }
         #endregion
 
-        #region  Phương tiện
+        #region   Loại xe
         [HttpGet("GetListLoaiXe")]
         public async Task<IActionResult> GetListLoaiXe()
         {
@@ -154,7 +154,7 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         [HttpPost("SetLoaiXe")]
-        public async Task<IActionResult> SetLoaiXe(LoaiXe data)
+        public async Task<IActionResult> SetLoaiXe([FromBody] LoaiXe data)
         {
             CurrentUser currUser = GetRequest("SetLoaiXe");
             if (!string.IsNullOrEmpty(currUser.Id))
@@ -181,7 +181,7 @@ namespace QuanLyChiPhi.Controllers
         }
         #endregion
 
-        #region  Loại xe
+        #region Phương tiện
         [HttpGet("GetListPhuongTien")]
         public async Task<IActionResult> GetListPhuongTien()
         {
@@ -209,7 +209,7 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         [HttpPost("SetPhuongTien")]
-        public async Task<IActionResult> SetPhuongTien(PhuongTien data)
+        public async Task<IActionResult> SetPhuongTien([FromBody] PhuongTien data)
         {
             CurrentUser currUser = GetRequest("SetPhuongTien");
             if (!string.IsNullOrEmpty(currUser.Id))
@@ -235,7 +235,6 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         #endregion
-
 
         #region  Loại đóng phí
         [HttpGet("GetListLoaiDongPhi")]
@@ -265,7 +264,7 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         [HttpPost("SetLoaiDongPhi")]
-        public async Task<IActionResult> SetLoaiDongPhi(LoaiDongPhi data)
+        public async Task<IActionResult> SetLoaiDongPhi([FromBody] LoaiDongPhi data)
         {
             CurrentUser currUser = GetRequest("SetLoaiDongPhi");
             if (!string.IsNullOrEmpty(currUser.Id))
@@ -320,7 +319,7 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         [HttpPost("SetCanHo")]
-        public async Task<IActionResult> SetCanHo(CanHo data)
+        public async Task<IActionResult> SetCanHo([FromBody] CanHo data)
         {
             CurrentUser currUser = GetRequest("SetCanHo");
             if (!string.IsNullOrEmpty(currUser.Id))
@@ -375,7 +374,7 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         [HttpPost("SetXeNgoai")]
-        public async Task<IActionResult> SetXeNgoai(XeNgoai data)
+        public async Task<IActionResult> SetXeNgoai([FromBody] XeNgoai data)
         {
             CurrentUser currUser = GetRequest("SetCanHo");
             if (!string.IsNullOrEmpty(currUser.Id))
@@ -430,7 +429,7 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         [HttpPost("SetQuanLyPhi")]
-        public async Task<IActionResult> SetQuanLyPhi(QuanLyPhi data)
+        public async Task<IActionResult> SetQuanLyPhi([FromBody] QuanLyPhi data)
         {
             CurrentUser currUser = GetRequest("SetQuanLyPhi");
             if (!string.IsNullOrEmpty(currUser.Id))

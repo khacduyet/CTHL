@@ -20,6 +20,7 @@ namespace QuanLyChiPhi.Common
 
     public class AppSettings
     {
+        public int AutoUpdate { get; set; }
         public string DuongDanUpload { get; set; }
         public string SmartEOSUrl { get; set; }
         public string SCMUrl { get; set; }

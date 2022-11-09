@@ -19,11 +19,28 @@ builder.Services.AddScoped<ApplicationContext>();
 //
 builder.Services.AddScoped<QuanLyChiPhi.Model.QuanLyChiPhi>();
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder.WithOrigins()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true)
+        .AllowCredentials());
+});
 
 builder.Services.AddControllers().AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+var config = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
+if (config.AutoUpdate == 1)
+{
+    var serviceScope = builder.Services.BuildServiceProvider().GetService<IServiceScopeFactory>().CreateScope();
+    var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationContext>();
+    context.Database.Migrate();
+}
 
 var app = builder.Build();
 
@@ -33,6 +50,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
