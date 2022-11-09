@@ -200,18 +200,12 @@ namespace QuanLyChiPhi.Common
     public class CurrentUser
     {
         public string Id { get; set; }
-        public string idNhanSu { get; set; }
         public string UserName { get; set; }
         public string TenNhanVien { get; set; }
         public string MaNhanVien { get; set; }
         public string Email { get; set; }
         public string DienThoai { get; set; }
         public bool IsLocked { get; set; }
-        public string ChucVu { get; set; }
-        public long idChucVu { get; set; }
-        public string BoPhan { get; set; }
-        public string Cookies { get; set; }
-        public long idBoPhan { get; set; }
         public CurrentUser() { }
         public CurrentUser(string Id)
         {
@@ -263,15 +257,15 @@ namespace QuanLyChiPhi.Common
             string sTT = "";
             switch (eTable)
             {
-                case DefineData.eTable.PCM_LAPTONGMUCDAUTU:
-                    sTT = "LTMDT";
-                    break;
-                case DefineData.eTable.PCM_LAPTONGMUCDAUTUDC:
-                    sTT = "LTMDTDC";
-                    break;
-                case DefineData.eTable.PCM_LAPTONGDUTOAN:
-                    sTT = "LTDT";
-                    break;
+                //case DefineData.eTable.PCM_LAPTONGMUCDAUTU:
+                //    sTT = "LTMDT";
+                //    break;
+                //case DefineData.eTable.PCM_LAPTONGMUCDAUTUDC:
+                //    sTT = "LTMDTDC";
+                //    break;
+                //case DefineData.eTable.PCM_LAPTONGDUTOAN:
+                //    sTT = "LTDT";
+                //    break;
 
             }
 
@@ -323,15 +317,6 @@ namespace QuanLyChiPhi.Common
             return true;
         }
 
-
-        public static string GetTableNameFromAction(string eAction)
-        {
-            DefineData.eTable eTable = new eTable();
-            if (eAction == DefineData.eAction.PCM_LAPTONGMUCDAUTU.ToString())
-                eTable = DefineData.eTable.PCM_LAPTONGMUCDAUTU;
-            return eTable.ToString();
-        }
-
         public static void DrawTableExcel(ExcelWorksheet sheet1, int nRowBegin, int nRowEnd, int nColBegin, int nColEnd)
         {
             sheet1.Cells[nRowBegin, nColBegin, nRowEnd, nColEnd].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Medium;
@@ -371,45 +356,45 @@ namespace QuanLyChiPhi.Common
     }
     public static class FileDinhKem
     {
-        public static void SetFileDinhKem(ApplicationContext db, List<PSM_FileDinhKem> listFile, DefineData.eTable eTable, string nIDBang, string IdTrangThai)
-        {
-            var dinhKem_TrangThais = db.PSM_FileDinhKem_TrangThai;
-            if (listFile != null)
-                foreach (var item in listFile)
-                {
-                    item.IdBang = nIDBang;
-                    item.TenBang = eTable.ToString();
-                    item.Created = item.Modified = DateTime.Now;
-                    if (item.isXoa)
-                    {
-                        if (!string.IsNullOrEmpty(item.Id))
-                        {
-                            PSM_FileDinhKem_TrangThai dinhKem_TrangThai = dinhKem_TrangThais.AsNoTracking().FirstOrDefault(x => x.IdFileDinhKem == item.Id);
-                            if (dinhKem_TrangThai != null)
-                                db.Remove(dinhKem_TrangThai);
-                            db.PSM_FileDinhKem.Remove(item);
-                            string sFile = (Path.Combine(Directory.GetCurrentDirectory(), "uploaded") ?? "") + item.FileNameGUI;
-                            if (File.Exists(sFile))
-                                File.Delete(sFile);
-                        }
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(item.Id))
-                        {
-                            PSM_FileDinhKem itemFind = db.PSM_FileDinhKem.FirstOrDefault(x => x.TenBang == item.TenBang && x.IdBang == nIDBang && x.FileNameGUI == item.FileNameGUI);
-                            if (itemFind != null)
-                                return;
-                            item.Id = Guid.NewGuid().ToString();
-                            db.PSM_FileDinhKem.Add(item);
-                            PSM_FileDinhKem_TrangThai dinhKem_TrangThai = new PSM_FileDinhKem_TrangThai() { Id = Guid.NewGuid().ToString(), IdTrangThai = IdTrangThai, IdFileDinhKem = item.Id };
-                            db.PSM_FileDinhKem_TrangThai.Add(dinhKem_TrangThai);
-                        }
-                        else
-                            db.PSM_FileDinhKem.Update(item);
-                    }
-                }
-        }
+        //public static void SetFileDinhKem(ApplicationContext db, List<PSM_FileDinhKem> listFile, DefineData.eTable eTable, string nIDBang, string IdTrangThai)
+        //{
+        //    var dinhKem_TrangThais = db.PSM_FileDinhKem_TrangThai;
+        //    if (listFile != null)
+        //        foreach (var item in listFile)
+        //        {
+        //            item.IdBang = nIDBang;
+        //            item.TenBang = eTable.ToString();
+        //            item.Created = item.Modified = DateTime.Now;
+        //            if (item.isXoa)
+        //            {
+        //                if (!string.IsNullOrEmpty(item.Id))
+        //                {
+        //                    PSM_FileDinhKem_TrangThai dinhKem_TrangThai = dinhKem_TrangThais.AsNoTracking().FirstOrDefault(x => x.IdFileDinhKem == item.Id);
+        //                    if (dinhKem_TrangThai != null)
+        //                        db.Remove(dinhKem_TrangThai);
+        //                    db.PSM_FileDinhKem.Remove(item);
+        //                    string sFile = (Path.Combine(Directory.GetCurrentDirectory(), "uploaded") ?? "") + item.FileNameGUI;
+        //                    if (File.Exists(sFile))
+        //                        File.Delete(sFile);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                if (string.IsNullOrEmpty(item.Id))
+        //                {
+        //                    PSM_FileDinhKem itemFind = db.PSM_FileDinhKem.FirstOrDefault(x => x.TenBang == item.TenBang && x.IdBang == nIDBang && x.FileNameGUI == item.FileNameGUI);
+        //                    if (itemFind != null)
+        //                        return;
+        //                    item.Id = Guid.NewGuid().ToString();
+        //                    db.PSM_FileDinhKem.Add(item);
+        //                    PSM_FileDinhKem_TrangThai dinhKem_TrangThai = new PSM_FileDinhKem_TrangThai() { Id = Guid.NewGuid().ToString(), IdTrangThai = IdTrangThai, IdFileDinhKem = item.Id };
+        //                    db.PSM_FileDinhKem_TrangThai.Add(dinhKem_TrangThai);
+        //                }
+        //                else
+        //                    db.PSM_FileDinhKem.Update(item);
+        //            }
+        //        }
+        //}
         public static List<PSM_FileDinhKem> GetListFileDinhKem(ApplicationContext db, string TableName, string IdTable)
         {
             List<PSM_FileDinhKem> TepDinhKems = db.PSM_FileDinhKem.Where(x => x.TenBang == TableName && x.IdBang == IdTable).ToList();

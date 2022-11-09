@@ -126,10 +126,10 @@ namespace QuanLyChiPhi.Entities
                 //}
             }
             return base.SaveChanges();
-
         }
 
         #region QuanLyChiPhi
+        public virtual DbSet<User> User { get; set; }
         public virtual DbSet<PSM_FileDinhKem> PSM_FileDinhKem { get; set; }
         public virtual DbSet<ChungCu> ChungCu { get; set; }
         public virtual DbSet<LoaiDichVu> LoaiDichVu { get; set; }

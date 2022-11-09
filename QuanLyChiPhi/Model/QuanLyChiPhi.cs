@@ -540,7 +540,7 @@ namespace QuanLyChiPhi.Model
                 msg.SetLoi("Không tồn tại!");
             return msg;
         }
-        public ErrorMessage SetXeNgoai(CanHo data)
+        public ErrorMessage SetXeNgoai(XeNgoai data)
         {
             using (var trans = _dbContext.Database.BeginTransaction())
             {
@@ -634,20 +634,20 @@ namespace QuanLyChiPhi.Model
                 msg.SetLoi("Không tồn tại!");
             return msg;
         }
-        public ErrorMessage SetQuanLyPhi(CanHo data)
+        public ErrorMessage SetQuanLyPhi(QuanLyPhi data)
         {
             using (var trans = _dbContext.Database.BeginTransaction())
             {
                 ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
                 try
                 {
-                    var checkMa = _dbContext.XeNgoai.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
-                    if (checkMa != null)
-                    {
-                        msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
-                        trans.Rollback();
-                        return msg;
-                    }
+                    //var checkMa = _dbContext.QuanLyPhi.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
+                    //if (checkMa != null)
+                    //{
+                    //    msg.SetLoi("Đã tồn tại mã: " + checkMa.Ma);
+                    //    trans.Rollback();
+                    //    return msg;
+                    //}
 
                     if (string.IsNullOrEmpty(data.Id))
                     {
