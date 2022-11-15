@@ -216,7 +216,7 @@ namespace QuanLyChiPhi.Model
                 ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
                 try
                 {
-                    
+
                     if (string.IsNullOrEmpty(data.Id))
                     {
                         var checkMa = _dbContext.LoaiXe.AsNoTracking().FirstOrDefault(x => x.Ma == data.Ma);
@@ -433,10 +433,15 @@ namespace QuanLyChiPhi.Model
         #endregion
 
         #region Căn hộ
-        public ErrorMessage GetListCanHo()
+        public ErrorMessage GetListCanHo(TimKiem timKiem)
         {
             ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
-            var data = _dbContext.CanHo.ToList();
+            var data = _dbContext.CanHo.Where(x =>
+                ((!String.IsNullOrEmpty(timKiem.Keyword) && (x.Ma.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
+                 x.Ten.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
+                (!String.IsNullOrEmpty(x.ChuSoHuu) && x.ChuSoHuu.ToLower().Trim() == timKiem.Keyword.ToLower().Trim()) ||
+                 x.SoDienThoai.ToLower().Trim() == timKiem.Keyword.ToLower().Trim())) && timKiem.IdChungCu == x.IdChungCu) || timKiem.IdChungCu == x.IdChungCu
+            ).ToList();
             msg.Data = data;
             return msg;
         }
@@ -555,22 +560,35 @@ namespace QuanLyChiPhi.Model
         #endregion
 
         #region Xe ngoài
-        public ErrorMessage GetListXeNgoai()
+        public ErrorMessage GetListXeNgoai(TimKiem timKiem)
         {
             ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
-            var data = _dbContext.XeNgoai.ToList();
-            var chungcus = _dbContext.ChungCu.ToList();
+            var data = _dbContext.XeNgoai.Where(x =>
+                ((!String.IsNullOrEmpty(timKiem.Keyword) && (x.Ma.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
+                 x.Ten.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
+                x.BienKiemSoat.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
+                 x.SoDienThoai.ToLower().Trim() == timKiem.Keyword.ToLower().Trim())) && timKiem.IdChungCu == x.IdChungCu) || timKiem.IdChungCu == x.IdChungCu
+            ).ToList();
+            if (!String.IsNullOrEmpty(timKiem.IdLoaiXe))
+            {
+                data = data.FindAll(x => x.IdLoaiXe == timKiem.IdLoaiXe);
+            }
+            if (!String.IsNullOrEmpty(timKiem.IdPhuongTien))
+            {
+                data = data.FindAll(x => x.IdPhuongTien == timKiem.IdPhuongTien);
+            }
+            //var chungcus = _dbContext.ChungCu.ToList();
             var phuongtiens = _dbContext.PhuongTien.ToList();
             var loaixes = _dbContext.LoaiXe.ToList();
             foreach (var item in data)
             {
-                var chungcu = chungcus.Find(x => x.Id == item.IdChungCu);
+                //var chungcu = chungcus.Find(x => x.Id == item.IdChungCu);
                 var phuongtien = phuongtiens.Find(x => x.Id == item.IdPhuongTien);
                 var loaixe = loaixes.Find(x => x.Id == item.IdLoaiXe);
-                if (chungcu != null)
-                {
-                    item.TenChungCu = chungcu.Ten;
-                }
+                //if (chungcu != null)
+                //{
+                //    item.TenChungCu = chungcu.Ten;
+                //}
                 if (phuongtien != null)
                 {
                     item.TenPhuongTien = phuongtien.Ten;

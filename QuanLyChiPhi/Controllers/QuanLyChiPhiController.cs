@@ -44,7 +44,7 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
         [HttpPost("SetChungCu")]
-        public async Task<IActionResult> SetChungCu([FromBody]ChungCu data)
+        public async Task<IActionResult> SetChungCu([FromBody] ChungCu data)
         {
             CurrentUser currUser = GetRequest("SetChungCu");
             if (!string.IsNullOrEmpty(currUser.Id))
@@ -292,14 +292,14 @@ namespace QuanLyChiPhi.Controllers
         #endregion
 
         #region  Căn hộ
-        [HttpGet("GetListCanHo")]
-        public async Task<IActionResult> GetListCanHo()
+        [HttpPost("GetListCanHo")]
+        public async Task<IActionResult> GetListCanHo([FromBody] TimKiem timKiem)
         {
             CurrentUser currUser = GetRequest("GetListCanHo");
             if (!string.IsNullOrEmpty(currUser.Id))
             {
                 _QuanLyChiPhi.SetCurrentUser(currUser);
-                var listItem = _QuanLyChiPhi.GetListCanHo();
+                var listItem = _QuanLyChiPhi.GetListCanHo(timKiem);
                 return Ok(listItem);
             }
             else
@@ -347,14 +347,14 @@ namespace QuanLyChiPhi.Controllers
         #endregion
 
         #region  Xe ngoài
-        [HttpGet("GetListXeNgoai")]
-        public async Task<IActionResult> GetListXeNgoai()
+        [HttpPost("GetListXeNgoai")]
+        public async Task<IActionResult> GetListXeNgoai([FromBody] TimKiem timKiem)
         {
             CurrentUser currUser = GetRequest("GetListXeNgoai");
             if (!string.IsNullOrEmpty(currUser.Id))
             {
                 _QuanLyChiPhi.SetCurrentUser(currUser);
-                var listItem = _QuanLyChiPhi.GetListXeNgoai();
+                var listItem = _QuanLyChiPhi.GetListXeNgoai(timKiem);
                 return Ok(listItem);
             }
             else
