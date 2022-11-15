@@ -436,12 +436,19 @@ namespace QuanLyChiPhi.Model
         public ErrorMessage GetListCanHo(TimKiem timKiem)
         {
             ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
-            var data = _dbContext.CanHo.Where(x =>
+            var data = _dbContext.CanHo.ToList();
+            if (!String.IsNullOrEmpty(timKiem.IdChungCu))
+            {
+                data = data.FindAll(x => timKiem.IdChungCu == x.IdChungCu);
+            }
+            if (!String.IsNullOrEmpty(timKiem.Keyword))
+            {
+                data = data.FindAll(x =>
                 ((!String.IsNullOrEmpty(timKiem.Keyword) && (x.Ma.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
                  x.Ten.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
                 (!String.IsNullOrEmpty(x.ChuSoHuu) && x.ChuSoHuu.ToLower().Trim() == timKiem.Keyword.ToLower().Trim()) ||
-                 x.SoDienThoai.ToLower().Trim() == timKiem.Keyword.ToLower().Trim())) && timKiem.IdChungCu == x.IdChungCu) || timKiem.IdChungCu == x.IdChungCu
-            ).ToList();
+                 x.SoDienThoai.ToLower().Trim() == timKiem.Keyword.ToLower().Trim()))));
+            }
             msg.Data = data;
             return msg;
         }
@@ -563,12 +570,19 @@ namespace QuanLyChiPhi.Model
         public ErrorMessage GetListXeNgoai(TimKiem timKiem)
         {
             ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
-            var data = _dbContext.XeNgoai.Where(x =>
-                ((!String.IsNullOrEmpty(timKiem.Keyword) && (x.Ma.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
-                 x.Ten.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
-                x.BienKiemSoat.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
-                 x.SoDienThoai.ToLower().Trim() == timKiem.Keyword.ToLower().Trim())) && timKiem.IdChungCu == x.IdChungCu) || timKiem.IdChungCu == x.IdChungCu
-            ).ToList();
+            var data = _dbContext.XeNgoai.ToList();
+            if (!String.IsNullOrEmpty(timKiem.IdChungCu))
+            {
+                data = data.FindAll(x => timKiem.IdChungCu == x.IdChungCu);
+            }
+            if (!String.IsNullOrEmpty(timKiem.Keyword))
+            {
+                data = data.FindAll(x =>
+                ((!String.IsNullOrEmpty(timKiem.Keyword) && (x.Ma.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim()) ||
+                 x.Ten.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim()) ||
+                x.BienKiemSoat.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim()) ||
+                 x.SoDienThoai.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim())))));
+            }
             if (!String.IsNullOrEmpty(timKiem.IdLoaiXe))
             {
                 data = data.FindAll(x => x.IdLoaiXe == timKiem.IdLoaiXe);
