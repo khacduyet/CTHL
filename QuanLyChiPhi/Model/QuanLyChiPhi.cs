@@ -471,6 +471,7 @@ namespace QuanLyChiPhi.Model
                         model.MaPhuongTien = phuongtien.Ma ?? "";
                         model.TenPhuongTien = phuongtien.Ten ?? "";
                         model.BienKiemSoat = item.BienKiemSoat ?? "";
+                        model.IdLoaiXe = item.IdLoaiXe;
                         model.TrangThai = item.TrangThai;
                         models.Add(model);
                     }
@@ -800,6 +801,7 @@ namespace QuanLyChiPhi.Model
                     }
                     _dbContext.SaveChanges();
                     trans.Commit();
+                    msg.Data = data.Id;
                     return msg;
                 }
                 catch (Exception)

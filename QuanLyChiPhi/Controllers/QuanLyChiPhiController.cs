@@ -402,8 +402,21 @@ namespace QuanLyChiPhi.Controllers
         #endregion
 
         #region  Quản lý phí
+        [HttpGet("GetNextSoPhieu")]
+        public async Task<IActionResult> GetNextSoPhieu()
+        {
+            CurrentUser currUser = GetRequest("GetNextSoPhieu");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.GetNextSoPhieu();
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
         [HttpPost("GetListQuanLyPhi")]
-        public async Task<IActionResult> GetListQuanLyPhi([FromBody]TimKiemPhieu timKiem)
+        public async Task<IActionResult> GetListQuanLyPhi([FromBody] TimKiemPhieu timKiem)
         {
             CurrentUser currUser = GetRequest("GetListQuanLyPhi");
             if (!string.IsNullOrEmpty(currUser.Id))
@@ -441,7 +454,7 @@ namespace QuanLyChiPhi.Controllers
             else
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
-        
+
         [HttpGet("DeleteQuanLyPhi")]
         public async Task<IActionResult> DeleteQuanLyPhi(string Id)
         {
