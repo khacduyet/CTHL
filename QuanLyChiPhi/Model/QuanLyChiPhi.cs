@@ -691,25 +691,68 @@ namespace QuanLyChiPhi.Model
         #endregion
 
         #region Quản lý phí
-        public ErrorMessage GetListQuanLyPhi()
+        public ErrorMessage GetNextSoPhieu()
+        {
+            ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.CapNhatThanhCong);
+            string sTT = Dungchung.GetNextSoQuyTrinhChungBanDau(DefineData.eTable.QUANLYDONGPHI);
+            string SoPhieu = _dbContext.QuanLyPhi.Where(d => d.SoPhieu.Contains(sTT)).OrderByDescending(x => x.Created).Select(x => x.SoPhieu).FirstOrDefault();
+            msg.Data = Dungchung.GetNextSoQuyTrinhChungKetThuc(sTT, SoPhieu);
+            return msg;
+        }
+        public ErrorMessage GetListQuanLyPhi(TimKiemPhieu timKiem)
         {
             ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
-            var data = _dbContext.XeNgoai.ToList();
+            List<QuanLyPhi> data = new List<QuanLyPhi>();
+            switch (timKiem.DaDongPhi)
+            {
+                case 0:
+                    data.AddRange(_dbContext.QuanLyPhi.Where(x => x.IdChungCu == timKiem.IdChungCu && !x.TrangThai).OrderByDescending(x => x.SoPhieu).ToList());
+                    break;
+                case 1:
+                    data.AddRange(_dbContext.QuanLyPhi.Where(x => x.IdChungCu == timKiem.IdChungCu && x.TrangThai).OrderByDescending(x => x.SoPhieu).ToList());
+                    break;
+                default:
+                    data.AddRange(_dbContext.QuanLyPhi.Where(x => x.IdChungCu == timKiem.IdChungCu).OrderByDescending(x => x.SoPhieu).ToList());
+                    break;
+            }
+            switch (timKiem.LoaiNguoiDung)
+            {
+                case 1:
+                    data = data.FindAll(x => !x.isXeNgoai);
+                    break;
+
+                case 2:
+                    data = data.FindAll(x => x.isXeNgoai);
+                    break;
+            }
             var chungcus = _dbContext.ChungCu.ToList();
             var phuongtiens = _dbContext.PhuongTien.ToList();
             var loaixes = _dbContext.LoaiXe.ToList();
+
+            if (!String.IsNullOrEmpty(timKiem.Keyword))
+            {
+                data = data.FindAll(x =>
+                    x.SoPhieu.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim()) ||
+                    x.NguoiDongPhi.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim())
+                );
+            }
+            if (!String.IsNullOrEmpty(timKiem.IdLoaiXe))
+            {
+                if (timKiem.LoaiNguoiDung != 1)
+                    data = data.FindAll(x => x.IdLoaiXe == timKiem.IdLoaiXe);
+            }
+            if (timKiem.Thang != null && timKiem.Thang != 0)
+            {
+                data = data.FindAll(x => x.Created.Month == timKiem.Thang);
+            }
+
             foreach (var item in data)
             {
                 var chungcu = chungcus.Find(x => x.Id == item.IdChungCu);
-                var phuongtien = phuongtiens.Find(x => x.Id == item.IdPhuongTien);
                 var loaixe = loaixes.Find(x => x.Id == item.IdLoaiXe);
                 if (chungcu != null)
                 {
                     item.TenChungCu = chungcu.Ten;
-                }
-                if (phuongtien != null)
-                {
-                    item.TenPhuongTien = phuongtien.Ten;
                 }
                 if (loaixe != null)
                 {
@@ -722,7 +765,7 @@ namespace QuanLyChiPhi.Model
         public ErrorMessage GetQuanLyPhi(string Id)
         {
             ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
-            var data = _dbContext.XeNgoai.Find(Id);
+            var data = _dbContext.QuanLyPhi.Find(Id);
             if (data != null)
             {
                 msg.Data = data;
@@ -770,7 +813,7 @@ namespace QuanLyChiPhi.Model
         public ErrorMessage DeleteQuanLyPhi(string Id)
         {
             ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
-            var data = _dbContext.XeNgoai.Find(Id);
+            var data = _dbContext.QuanLyPhi.Find(Id);
             if (data != null)
             {
                 _dbContext.Remove(data);
@@ -785,6 +828,12 @@ namespace QuanLyChiPhi.Model
 
 
         // Tạo nhanh phiếu thu
+        public string GetNextSoPhieuInList(List<QuanLyPhi> QuanLyPhi)
+        {
+            string sTT = Dungchung.GetNextSoQuyTrinhChungBanDau(DefineData.eTable.QUANLYDONGPHI);
+            string SoPhieu = QuanLyPhi.Where(d => d.SoPhieu.Contains(sTT)).OrderByDescending(x => x.Created).Select(x => x.SoPhieu).FirstOrDefault();
+            return Dungchung.GetNextSoQuyTrinhChungKetThuc(sTT, SoPhieu);
+        }
         public ErrorMessage CreatePhieu(TaoNhanhPhieu taoNhanh)
         {
             using (var trans = _dbContext.Database.BeginTransaction())
@@ -795,6 +844,8 @@ namespace QuanLyChiPhi.Model
                     var canhos = _dbContext.CanHo.Where(x => x.IdChungCu == taoNhanh.IdChungCu).ToList();
                     var canho_phuongtiens = _dbContext.CanHo_PhuongTien.Where(x => x.IdChungCu == taoNhanh.IdChungCu).ToList();
                     var xengoais = _dbContext.XeNgoai.Where(x => x.IdChungCu == taoNhanh.IdChungCu).ToList();
+
+                    string soPhieu = GetNextSoPhieu().Data;
 
                     var loaixes = _dbContext.LoaiXe.ToList();
                     var phuongtiens = _dbContext.PhuongTien.ToList();
@@ -812,9 +863,18 @@ namespace QuanLyChiPhi.Model
                     foreach (var item in canhos)
                     {
                         var phieu = phieucanhos.Find(x => x.IdCanHo == item.Id);
+                        string SP = "";
+                        if (phieuNew.Count() > 0)
+                        {
+                            SP = GetNextSoPhieuInList(phieuNew);
+                        }
+                        else
+                        {
+                            SP = soPhieu;
+                        }
                         if (phieu != null)
                         {
-                            if (phieu.Created.Month == current_month)
+                            if (phieu.Created.Month < current_month)
                             {
                                 var ch_pts = canho_phuongtiens.FindAll(x => x.IdCanHo == item.Id);
                                 string _ghiChu = "Phí dịch vụ T" + current_month + "/" + current_year + ", ";
@@ -839,6 +899,7 @@ namespace QuanLyChiPhi.Model
                                 phieuNew.Add(new QuanLyPhi()
                                 {
                                     Id = Guid.NewGuid().ToString(),
+                                    SoPhieu = SP,
                                     isGanNhat = true,
                                     isXeNgoai = false,
                                     NguoiDongPhi = item.ChuSoHuu,
@@ -849,9 +910,7 @@ namespace QuanLyChiPhi.Model
                                     GhiChu = _ghiChu,
                                     TongTien = _tongTien,
                                 });
-                            }
-                            else
-                            {
+                                // Set Phiếu cũ 
                                 phieu.isGanNhat = false;
                                 phieuUpdate.Add(phieu);
                             }
@@ -881,6 +940,7 @@ namespace QuanLyChiPhi.Model
                             phieuNew.Add(new QuanLyPhi()
                             {
                                 Id = Guid.NewGuid().ToString(),
+                                SoPhieu = SP,
                                 isGanNhat = true,
                                 isXeNgoai = false,
                                 NguoiDongPhi = item.ChuSoHuu,
@@ -897,9 +957,18 @@ namespace QuanLyChiPhi.Model
                     foreach (var item in xengoais)
                     {
                         var phieu = phieuxengoais.Find(x => x.IdXeNgoai == item.Id);
+                        string SP = "";
+                        if (phieuNew.Count() > 0)
+                        {
+                            SP = GetNextSoPhieuInList(phieuNew);
+                        }
+                        else
+                        {
+                            SP = soPhieu;
+                        }
                         if (phieu != null)
                         {
-                            if (phieu.Created.Month == current_month)
+                            if (phieu.Created.Month < current_month)
                             {
                                 string _ghiChu = "Phí gửi ";
                                 double _tongTien = 0;
@@ -916,6 +985,7 @@ namespace QuanLyChiPhi.Model
                                 phieuNew.Add(new QuanLyPhi()
                                 {
                                     Id = Guid.NewGuid().ToString(),
+                                    SoPhieu = SP,
                                     isGanNhat = true,
                                     isXeNgoai = true,
                                     NguoiDongPhi = item.Ten,
@@ -927,9 +997,8 @@ namespace QuanLyChiPhi.Model
                                     GhiChu = _ghiChu,
                                     TongTien = _tongTien,
                                 });
-                            }
-                            else
-                            {
+
+                                // Set Phiếu cũ 
                                 phieu.isGanNhat = false;
                                 phieuUpdate.Add(phieu);
                             }
@@ -951,6 +1020,7 @@ namespace QuanLyChiPhi.Model
                             phieuNew.Add(new QuanLyPhi()
                             {
                                 Id = Guid.NewGuid().ToString(),
+                                SoPhieu = SP,
                                 isGanNhat = true,
                                 isXeNgoai = true,
                                 NguoiDongPhi = item.Ten,

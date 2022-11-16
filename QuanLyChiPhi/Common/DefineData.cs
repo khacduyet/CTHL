@@ -21,7 +21,7 @@
         }
         public enum eTable
         {
-
+            QUANLYDONGPHI
         };
         public enum eModify
         {

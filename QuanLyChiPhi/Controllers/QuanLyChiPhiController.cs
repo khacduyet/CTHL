@@ -402,14 +402,14 @@ namespace QuanLyChiPhi.Controllers
         #endregion
 
         #region  Quản lý phí
-        [HttpGet("GetListQuanLyPhi")]
-        public async Task<IActionResult> GetListQuanLyPhi()
+        [HttpPost("GetListQuanLyPhi")]
+        public async Task<IActionResult> GetListQuanLyPhi([FromBody]TimKiemPhieu timKiem)
         {
             CurrentUser currUser = GetRequest("GetListQuanLyPhi");
             if (!string.IsNullOrEmpty(currUser.Id))
             {
                 _QuanLyChiPhi.SetCurrentUser(currUser);
-                var listItem = _QuanLyChiPhi.GetListQuanLyPhi();
+                var listItem = _QuanLyChiPhi.GetListQuanLyPhi(timKiem);
                 return Ok(listItem);
             }
             else

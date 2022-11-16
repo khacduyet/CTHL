@@ -105,6 +105,7 @@ namespace QuanLyChiPhi.Entities
     // Quản lý đóng phi hàng tháng/quý/năm
     public class QuanLyPhi : Auditable
     {
+        public string? SoPhieu { get; set; }
         public string? NguoiDongPhi { get; set; }
         public int? Ngay { get; set; }
         public int? Thang { get; set; }

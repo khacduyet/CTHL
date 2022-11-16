@@ -258,16 +258,9 @@ namespace QuanLyChiPhi.Common
             string sTT = "";
             switch (eTable)
             {
-                //case DefineData.eTable.PCM_LAPTONGMUCDAUTU:
-                //    sTT = "LTMDT";
-                //    break;
-                //case DefineData.eTable.PCM_LAPTONGMUCDAUTUDC:
-                //    sTT = "LTMDTDC";
-                //    break;
-                //case DefineData.eTable.PCM_LAPTONGDUTOAN:
-                //    sTT = "LTDT";
-                //    break;
-
+                case DefineData.eTable.QUANLYDONGPHI:
+                    sTT = "QLDP";
+                    break;
             }
 
             DateTime dt = DateTime.Now;
