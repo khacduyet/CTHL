@@ -441,6 +441,7 @@ namespace QuanLyChiPhi.Controllers
             else
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
+        
         [HttpGet("DeleteQuanLyPhi")]
         public async Task<IActionResult> DeleteQuanLyPhi(string Id)
         {
@@ -449,6 +450,20 @@ namespace QuanLyChiPhi.Controllers
             {
                 _QuanLyChiPhi.SetCurrentUser(currUser);
                 var listItem = _QuanLyChiPhi.DeleteQuanLyPhi(Id);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
+
+        [HttpPost("CreatePhieu")]
+        public async Task<IActionResult> CreatePhieu([FromBody] TaoNhanhPhieu data)
+        {
+            CurrentUser currUser = GetRequest("CreatePhieu");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.CreatePhieu(data);
                 return Ok(listItem);
             }
             else

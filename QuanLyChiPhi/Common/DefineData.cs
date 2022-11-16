@@ -9,13 +9,19 @@
             THANG = 2,
             NAM = 3,
         }
+        public enum eLoaiDongPhi
+        {
+            THANG = 0,
+            QUY = 1,
+            NAM = 2
+        }
         public enum eAction
         {
-            
+
         }
         public enum eTable
         {
-            
+
         };
         public enum eModify
         {

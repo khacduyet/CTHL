@@ -8,5 +8,10 @@ namespace QuanLyChiPhi.Entities
         public string IdLoaiXe { get; set; }
         public string IdChungCu { get; set; }
     }
+
+    public class TaoNhanhPhieu
+    {
+        public string IdChungCu { get; set; }
+    }
 }
 

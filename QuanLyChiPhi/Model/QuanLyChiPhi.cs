@@ -505,9 +505,11 @@ namespace QuanLyChiPhi.Model
                         {
                             Id = Guid.NewGuid().ToString(),
                             IdCanHo = data.Id,
+                            IdLoaiXe = x.IdLoaiXe,
                             IdPhuongTien = x.IdPhuongTien,
                             BienKiemSoat = x.BienKiemSoat,
-                            TrangThai = x.TrangThai
+                            TrangThai = x.TrangThai,
+                            IdChungCu = data.IdChungCu
                         }).ToList();
                         _dbContext.AddRange(News);
                     }
@@ -528,9 +530,11 @@ namespace QuanLyChiPhi.Model
                         {
                             Id = Guid.NewGuid().ToString(),
                             IdCanHo = data.Id,
+                            IdLoaiXe = x.IdLoaiXe,
                             IdPhuongTien = x.IdPhuongTien,
                             BienKiemSoat = x.BienKiemSoat,
-                            TrangThai = x.TrangThai
+                            TrangThai = x.TrangThai,
+                            IdChungCu = data.IdChungCu
                         }).ToList();
                         _dbContext.AddRange(News);
                         _dbContext.Update(data);
@@ -778,6 +782,205 @@ namespace QuanLyChiPhi.Model
             }
             return msg;
         }
+
+
+        // Tạo nhanh phiếu thu
+        public ErrorMessage CreatePhieu(TaoNhanhPhieu taoNhanh)
+        {
+            using (var trans = _dbContext.Database.BeginTransaction())
+            {
+                ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+                try
+                {
+                    var canhos = _dbContext.CanHo.Where(x => x.IdChungCu == taoNhanh.IdChungCu).ToList();
+                    var canho_phuongtiens = _dbContext.CanHo_PhuongTien.Where(x => x.IdChungCu == taoNhanh.IdChungCu).ToList();
+                    var xengoais = _dbContext.XeNgoai.Where(x => x.IdChungCu == taoNhanh.IdChungCu).ToList();
+
+                    var loaixes = _dbContext.LoaiXe.ToList();
+                    var phuongtiens = _dbContext.PhuongTien.ToList();
+                    var loaidichvus = _dbContext.LoaiDichVu.ToList();
+
+                    var phieus = _dbContext.QuanLyPhi.Where(x => x.isGanNhat && x.IdChungCu == taoNhanh.IdChungCu).ToList();
+                    var current_time = DateTime.Now;
+                    var current_month = current_time.Month;
+                    var current_year = current_time.Year;
+
+                    var phieucanhos = phieus.FindAll(x => !x.isXeNgoai);
+                    var phieuxengoais = phieus.FindAll(x => x.isXeNgoai);
+                    List<QuanLyPhi> phieuNew = new List<QuanLyPhi>();
+                    List<QuanLyPhi> phieuUpdate = new List<QuanLyPhi>();
+                    foreach (var item in canhos)
+                    {
+                        var phieu = phieucanhos.Find(x => x.IdCanHo == item.Id);
+                        if (phieu != null)
+                        {
+                            if (phieu.Created.Month == current_month)
+                            {
+                                var ch_pts = canho_phuongtiens.FindAll(x => x.IdCanHo == item.Id);
+                                string _ghiChu = "Phí dịch vụ T" + current_month + "/" + current_year + ", ";
+                                double _tongTien = 0;
+                                foreach (var _item in ch_pts)
+                                {
+                                    var _i = phuongtiens.Find(x => x.Id == _item.IdPhuongTien);
+                                    var _lx = loaixes.Find(x => x.Id == _item.IdLoaiXe);
+                                    if (_i != null)
+                                    {
+                                        _ghiChu += _i.Ten + " " + _item.BienKiemSoat + "; ";
+                                    }
+                                    if (_lx != null)
+                                    {
+                                        _tongTien += _lx.DonGia.Value;
+                                    }
+                                }
+                                foreach (var _ldv in loaidichvus)
+                                {
+                                    _tongTien += (_ldv.DonGia.Value * item.DienTich.Value);
+                                }
+                                phieuNew.Add(new QuanLyPhi()
+                                {
+                                    Id = Guid.NewGuid().ToString(),
+                                    isGanNhat = true,
+                                    isXeNgoai = false,
+                                    NguoiDongPhi = item.ChuSoHuu,
+                                    IdCanHo = item.Id,
+                                    IdChungCu = taoNhanh.IdChungCu,
+                                    LoaiDongPhi = DefineData.eLoaiDongPhi.THANG.ToString(),
+                                    TrangThai = false,
+                                    GhiChu = _ghiChu,
+                                    TongTien = _tongTien,
+                                });
+                            }
+                            else
+                            {
+                                phieu.isGanNhat = false;
+                                phieuUpdate.Add(phieu);
+                            }
+                        }
+                        else
+                        {
+                            var ch_pts = canho_phuongtiens.FindAll(x => x.IdCanHo == item.Id);
+                            string _ghiChu = "Phí dịch vụ T" + current_month + "/" + current_year + ", ";
+                            double _tongTien = 0;
+                            foreach (var _item in ch_pts)
+                            {
+                                var _i = phuongtiens.Find(x => x.Id == _item.IdPhuongTien);
+                                var _lx = loaixes.Find(x => x.Id == _item.IdLoaiXe);
+                                if (_i != null)
+                                {
+                                    _ghiChu += _i.Ten + " " + _item.BienKiemSoat + "; ";
+                                }
+                                if (_lx != null)
+                                {
+                                    _tongTien += _lx.DonGia.Value;
+                                }
+                            }
+                            foreach (var _ldv in loaidichvus)
+                            {
+                                _tongTien += (_ldv.DonGia.Value * item.DienTich.Value);
+                            }
+                            phieuNew.Add(new QuanLyPhi()
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                isGanNhat = true,
+                                isXeNgoai = false,
+                                NguoiDongPhi = item.ChuSoHuu,
+                                IdCanHo = item.Id,
+                                IdChungCu = taoNhanh.IdChungCu,
+                                LoaiDongPhi = DefineData.eLoaiDongPhi.THANG.ToString(),
+                                TrangThai = false,
+                                GhiChu = _ghiChu,
+                                TongTien = _tongTien,
+                            });
+                        }
+                    }
+
+                    foreach (var item in xengoais)
+                    {
+                        var phieu = phieuxengoais.Find(x => x.IdXeNgoai == item.Id);
+                        if (phieu != null)
+                        {
+                            if (phieu.Created.Month == current_month)
+                            {
+                                string _ghiChu = "Phí gửi ";
+                                double _tongTien = 0;
+                                var _i = phuongtiens.Find(x => x.Id == item.IdPhuongTien);
+                                var _lx = loaixes.Find(x => x.Id == item.IdLoaiXe);
+                                if (_i != null)
+                                {
+                                    _ghiChu += _i.Ten + " " + item.BienKiemSoat + " T" + current_month + "/" + current_year;
+                                }
+                                if (_lx != null)
+                                {
+                                    _tongTien += _lx.DonGia.Value;
+                                }
+                                phieuNew.Add(new QuanLyPhi()
+                                {
+                                    Id = Guid.NewGuid().ToString(),
+                                    isGanNhat = true,
+                                    isXeNgoai = true,
+                                    NguoiDongPhi = item.Ten,
+                                    IdXeNgoai = item.Id,
+                                    IdChungCu = taoNhanh.IdChungCu,
+                                    IdLoaiXe = item.IdLoaiXe,
+                                    LoaiDongPhi = DefineData.eLoaiDongPhi.THANG.ToString(),
+                                    TrangThai = false,
+                                    GhiChu = _ghiChu,
+                                    TongTien = _tongTien,
+                                });
+                            }
+                            else
+                            {
+                                phieu.isGanNhat = false;
+                                phieuUpdate.Add(phieu);
+                            }
+                        }
+                        else
+                        {
+                            string _ghiChu = "Phí gửi ";
+                            double _tongTien = 0;
+                            var _i = phuongtiens.Find(x => x.Id == item.IdPhuongTien);
+                            var _lx = loaixes.Find(x => x.Id == item.IdLoaiXe);
+                            if (_i != null)
+                            {
+                                _ghiChu += _i.Ten + " " + item.BienKiemSoat + " T" + current_month + "/" + current_year;
+                            }
+                            if (_lx != null)
+                            {
+                                _tongTien += _lx.DonGia.Value;
+                            }
+                            phieuNew.Add(new QuanLyPhi()
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                isGanNhat = true,
+                                isXeNgoai = true,
+                                NguoiDongPhi = item.Ten,
+                                IdXeNgoai = item.Id,
+                                IdChungCu = taoNhanh.IdChungCu,
+                                IdLoaiXe = item.IdLoaiXe,
+                                LoaiDongPhi = DefineData.eLoaiDongPhi.THANG.ToString(),
+                                TrangThai = false,
+                                GhiChu = _ghiChu,
+                                TongTien = _tongTien,
+                            });
+                        }
+                    }
+                    _dbContext.UpdateRange(phieuUpdate);
+                    _dbContext.AddRange(phieuNew);
+                    _dbContext.SaveChanges();
+                    trans.Commit();
+                    return msg;
+                }
+                catch (Exception)
+                {
+                    msg.SetLoi("Đã có lỗi xảy ra!");
+                    trans.Rollback();
+                    return msg;
+                }
+            }
+        }
+
+        // Xác nhận đóng phí
+
         #endregion
     }
 }

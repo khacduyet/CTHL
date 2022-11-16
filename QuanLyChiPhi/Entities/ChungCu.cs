@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using QuanLyChiPhi.Common;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyChiPhi.Entities
 {
@@ -63,6 +64,7 @@ namespace QuanLyChiPhi.Entities
     public class Model_PhuongTien
     {
         public string? IdPhuongTien { get; set; }
+        public string? IdLoaiXe { get; set; }
         public string MaPhuongTien { get; set; }
         public string TenPhuongTien { get; set; }
         public string BienKiemSoat { get; set; }
@@ -73,8 +75,10 @@ namespace QuanLyChiPhi.Entities
     {
         public string? IdCanHo { get; set; }
         public string? IdPhuongTien { get; set; }
+        public string? IdLoaiXe { get; set; }
         public string? BienKiemSoat { get; set; }
         public bool TrangThai { get; set; }
+        public string? IdChungCu { get; set; }
     }
 
     // Quản lý xe ngoài 
@@ -108,11 +112,21 @@ namespace QuanLyChiPhi.Entities
         public double? TongTien { get; set; }
         public string? GhiChu { get; set; }
         public bool TrangThai { get; set; }
+
+        // Căn hộ
         public string? IdCanHo { get; set; }
+        // End căn hộ
+
+        // Xe ngoài
         public string? IdXeNgoai { get; set; }
         public string? IdLoaiXe { get; set; }
-        public string? IdLoaiDongPhi { get; set; }
+        // End xe ngoài
+
+        public string? LoaiDongPhi { get; set; } = DefineData.eLoaiDongPhi.THANG.ToString();
+
         public string? IdChungCu { get; set; }
+        public bool isXeNgoai { get; set; }
+        public bool isGanNhat { get; set; } = true;
         [NotMapped]
         public string? TenChungCu { get; set; }
         [NotMapped]

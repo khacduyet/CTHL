@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuanLyChiPhi.Entities;
 
@@ -11,9 +12,10 @@ using QuanLyChiPhi.Entities;
 namespace QuanLyChiPhi.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221116025440_initial2")]
+    partial class initial2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,12 +102,6 @@ namespace QuanLyChiPhi.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("IdCanHo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdChungCu")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdLoaiXe")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdPhuongTien")
@@ -499,9 +495,6 @@ namespace QuanLyChiPhi.Migrations
                         .HasColumnType("float");
 
                     b.Property<bool>("TrangThai")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isGanNhat")
                         .HasColumnType("bit");
 
                     b.Property<bool>("isXeNgoai")
