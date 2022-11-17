@@ -344,6 +344,19 @@ namespace QuanLyChiPhi.Controllers
             else
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
+        [HttpGet("ImportCanHo")]
+        public async Task<IActionResult> ImportCanHo(string FileName, string IdChungCu)
+        {
+            CurrentUser currUser = GetRequest("ImportCanHo");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.ImportCanHo(FileName, IdChungCu);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
         #endregion
 
         #region  Xe ngoài

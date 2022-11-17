@@ -24,6 +24,8 @@ namespace QuanLyChiPhi.Model
             _dbContext.currentUser = currentUser;
         }
 
+
+
         #region Chung cư
         public ErrorMessage GetListChungCu()
         {
@@ -568,6 +570,220 @@ namespace QuanLyChiPhi.Model
                 msg.SetLoi("Không tồn tại!");
             }
             return msg;
+        }
+
+        public int getRowMerge(ExcelWorksheet sheet, int row, int rs)
+        {
+            string Ma = Dungchung.GetCell(sheet, row, 2);
+            string MaPT = Dungchung.GetCell(sheet, row, 7);
+            string MaLX = Dungchung.GetCell(sheet, row, 8);
+            if (Ma == "" && MaPT == "" && MaLX == "")
+            {
+                return rs;
+            }
+            if (Ma == "" && MaPT != "" && MaLX != "")
+            {
+                rs++;
+                int _row = row + 1;
+                rs = getRowMerge(sheet, _row, rs);
+            }
+            return rs;
+        }
+
+        public ErrorMessage ImportCanHo(string FileName, string IdChungCu)
+        {
+            ErrorMessage err = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+            try
+            {
+                string sFileName = _appSettings.DuongDanUpload + FileName;
+                Stream s = File.OpenRead(sFileName);
+                ExcelPackage package = new ExcelPackage(s);
+                ExcelWorksheet sheet1 = package.Workbook.Worksheets.First();
+                List<string> Mas = _dbContext.CanHo.Select(x => x.Ma).ToList();
+                var listDanhMuc = new List<CanHo>();
+                if (!Dungchung.KiemTraMaTrungExcel(sheet1, err))
+                {
+                    err.Data = listDanhMuc;
+                    return err;
+                }
+
+                var listColumnName = new List<string>();
+                String[] ColumnNames = new String[] { "STT", "Mã", "Tên", "Chủ sở hữu", "Số điện thoại", "Diện tích", "Mã phương tiện", "Mã loại xe", "Biển kiểm soát", "Ghi Chú" };
+                listColumnName.AddRange(ColumnNames);
+                if (!Dungchung.KiemTraTempExcel(sheet1, err, listColumnName, "DANH SÁCH CƯ DÂN", 10))
+                    return err;
+
+                if (!Dungchung.KiemTraMaTrungDb(sheet1, err, Mas))
+                {
+                    err.Data = listDanhMuc;
+                    return err;
+                }
+
+                var phuongtiens = _dbContext.PhuongTien.ToList();
+                var loaixes = _dbContext.LoaiXe.ToList();
+
+                List<CanHo_PhuongTien> canho_pts = new List<CanHo_PhuongTien>();
+                bool checkMaExist = false;
+
+                for (int row = 3; row <= sheet1.Cells.End.Row; row++)
+                {
+                    CanHo dm = new CanHo();
+                    dm.Ma = Dungchung.GetCell(sheet1, row, 2);
+                    string MaPT = Dungchung.GetCell(sheet1, row, 7);
+                    string MaLX = Dungchung.GetCell(sheet1, row, 8);
+                    string BKS = Dungchung.GetCell(sheet1, row, 9);
+                    if (dm.Ma == "" && MaPT == "" && MaLX == "")
+                        break;
+                    int _row = row + 1;
+                    int rowMerge = getRowMerge(sheet1, _row, 1);
+
+                    dm.Id = Guid.NewGuid().ToString();
+                    dm.Ten = Dungchung.GetCell(sheet1, row, 3);
+                    dm.ChuSoHuu = Dungchung.GetCell(sheet1, row, 4);
+                    dm.SoDienThoai = Dungchung.GetCell(sheet1, row, 5);
+                    if (Dungchung.IsValidDecimalNumber(Dungchung.GetCell(sheet1, row, 6)))
+                    {
+                        dm.DienTich = Double.Parse(Dungchung.GetCell(sheet1, row, 6));
+                    }
+                    dm.GhiChu = Dungchung.GetCell(sheet1, row, 10);
+                    dm.IdChungCu = IdChungCu;
+                    dm.TrangThai = true;
+                    listDanhMuc.Add(dm);
+                    if (rowMerge > 1)
+                    {
+                        for (int i = 0; i < rowMerge; i++)
+                        {
+                            string MaPT_merge = Dungchung.GetCell(sheet1, row + i, 7);
+                            string MaLX_merge = Dungchung.GetCell(sheet1, row + i, 8);
+                            string BKS_merge = Dungchung.GetCell(sheet1, row + i, 9);
+                            var phuongtien = phuongtiens.Find(x => x.Ma == MaPT_merge);
+                            var loaixe = loaixes.Find(x => x.Ma == MaLX_merge);
+                            if (phuongtien != null && loaixe != null)
+                            {
+                                canho_pts.Add(new CanHo_PhuongTien()
+                                {
+                                    Id = Guid.NewGuid().ToString(),
+                                    IdPhuongTien = phuongtien.Id,
+                                    IdLoaiXe = loaixe.Id,
+                                    BienKiemSoat = BKS_merge,
+                                    TrangThai = true,
+                                    IdCanHo = dm.Id,
+                                    IdChungCu = IdChungCu
+                                });
+                            }
+                            else
+                            {
+                                checkMaExist = true;
+                            }
+                        }
+                        row += rowMerge - 1;
+                    }
+                    else
+                    {
+                        var phuongtien = phuongtiens.Find(x => x.Ma == MaPT);
+                        var loaixe = loaixes.Find(x => x.Ma == MaLX);
+                        if (phuongtien != null && loaixe != null)
+                        {
+                            canho_pts.Add(new CanHo_PhuongTien()
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                IdPhuongTien = phuongtien.Id,
+                                IdLoaiXe = loaixe.Id,
+                                BienKiemSoat = BKS,
+                                TrangThai = true,
+                                IdCanHo = dm.Id,
+                                IdChungCu = IdChungCu
+                            });
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(MaPT) && !string.IsNullOrEmpty(MaLX))
+                            {
+                                checkMaExist = true;
+                            }
+                        }
+                    }
+                }
+
+                if (checkMaExist)
+                {
+                    err.SetLoi("Mã phương tiện hoặc mã loại xe không tồn tại, vui lòng kiểm tra lại!");
+                    return err;
+                }
+
+                var danhMucs = _dbContext.CanHo.ToList();
+                foreach (var item in listDanhMuc)
+                {
+                    CanHo dm = danhMucs.FirstOrDefault(x => x.Ma == item.Ma);
+                    if (dm == null)
+                        _dbContext.CanHo.Add(item);
+                    else
+                    {
+                        dm.Ten = item.Ten;
+                        dm.GhiChu = item.GhiChu;
+                        _dbContext.CanHo.Update(dm);
+                    }
+                }
+                _dbContext.AddRange(canho_pts);
+                _dbContext.SaveChanges();
+                s.Close();
+                err.Data = _dbContext.CanHo.OrderByDescending(x => x.Created).ToList();
+                return err;
+            }
+            catch (Exception e)
+            {
+                err.SetLoi("Importdm " + e.ToString());
+                return err;
+            }
+        }
+        public ErrorMessage ExportdmLoaiGoiThau(TimKiem itemTimKiem)
+        {
+            ErrorMessage err = new ErrorMessage(ErrorMessage.eState.ImportDuLieuThanhCong);
+            try
+            {
+                string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "CuDan.xlsx");
+                DateTime dt = DateTime.Now;
+                string sFileNameCopy = _appSettings.DuongDanUpload + "CuDanDownload_" + dt.ToOADate() + ".xlsx";
+                File.Copy(sFileName, sFileNameCopy, true);
+                Stream s = File.OpenRead(sFileNameCopy);
+                ExcelPackage package = new ExcelPackage(s);
+                ExcelWorksheet sheet1 = package.Workbook.Worksheets.First();
+
+                var danhmucs = _dbContext.CanHo.OrderBy(x => x.Ma).ToList();
+                var phuongtien = _dbContext.PhuongTien.ToList();
+                int nRow = 3;
+                int i = 1;
+                foreach (var danhmuc in danhmucs)
+                {
+                    sheet1.Cells[nRow, 1].Value = i;
+                    sheet1.Cells[nRow, 2].Value = danhmuc.Ma;
+                    sheet1.Cells[nRow, 3].Value = danhmuc.Ten;
+                    sheet1.Cells[nRow, 4].Value = danhmuc.GhiChu;
+                    nRow++;
+                    i++;
+
+                }
+                if (nRow > 3)
+                {
+                    nRow--;
+                    sheet1.Cells[2, 3, nRow, 3].Style.WrapText = true;
+                    sheet1.Cells[2, 4, nRow, 4].Style.WrapText = true;
+                    sheet1.Cells[2, 5, nRow, 5].Style.WrapText = true;
+                    Dungchung.DrawTableExcel(sheet1, 4, nRow, 1, 6);
+                }
+                s.Close();
+
+                byte[] bytee = package.GetAsByteArray();
+                File.WriteAllBytes(sFileNameCopy, bytee);
+                err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("CuDan.xlsx")
+                                + "&path=" + Dungchung.Base64Encode(sFileNameCopy);
+                return err;
+            }
+            catch (Exception e)
+            {
+                err.SetLoi("ExportDanhMuc " + e.ToString());
+                return err;
+            }
         }
         #endregion
 

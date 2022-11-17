@@ -283,6 +283,80 @@ namespace QuanLyChiPhi.Common
             }
             return sTT + s;
         }
+        public static bool KiemTraMaTrungExcel(ExcelWorksheet sheet1, ErrorMessage err)
+        {
+            List<string> Mas = new List<string>();
+            string sMaTrung = "";
+            for (int row = 4; row <= sheet1.Cells.End.Row; row++)
+            {
+                string sMa = GetCell(sheet1, row, 2);
+                if (sMa == "")
+                    break;
+                string sMaFind = Mas.Find(x => x == sMa);
+                if (sMaFind != null)
+                    sMaTrung += sMaFind + "; ";
+                else
+                    Mas.Add(sMa);
+            }
+            if (sMaTrung != "")
+            {
+                sMaTrung = "Mã trong tệp excel bị trùng: " + sMaTrung;
+                err.SetLoi(sMaTrung);
+                return false;
+            }
+            return true;
+        }
+        public static bool KiemTraMaTrungDb(ExcelWorksheet sheet1, ErrorMessage err, List<string> Mas)
+        {
+            string sMaTrung = "";
+            for (int row = 4; row <= sheet1.Cells.End.Row; row++)
+            {
+                string sMa = GetCell(sheet1, row, 2);
+                if (sMa == "")
+                    break;
+                var Ma = Mas.Find(x => x == sMa);
+                if (!String.IsNullOrEmpty(Ma))
+                {
+                    string sMaFind = Ma;
+                    sMaTrung += sMaFind + "; ";
+                }
+            }
+            if (sMaTrung != "")
+            {
+                sMaTrung = "Mã bị trùng: " + sMaTrung;
+                err.SetLoi(sMaTrung);
+                return false;
+            }
+            return true;
+        }
+        public static bool KiemTraTempExcel(ExcelWorksheet sheet1, ErrorMessage err, List<string> listColumnName, string tieuDe, int totalCol)
+        {
+            if (sheet1 != null)
+            {
+                string TieuDeExcel = GetCell(sheet1, 1, 1);
+                if (TieuDeExcel != tieuDe)
+                {
+                    err.SetLoi("Tiêu đề sai định dạng: " + TieuDeExcel);
+                    return false;
+                }
+                string ColumnSai = "";
+                for (int col = 1; col <= totalCol; col++)
+                {
+                    var colName = GetCell(sheet1, 2, col);
+                    if (!listColumnName.Contains(colName) && colName != "")
+                    {
+                        ColumnSai += colName + ',';
+                    }
+                }
+                if (ColumnSai != "")
+                {
+                    err.SetLoi("Sai định dạng cột: " + ColumnSai);
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
         public static string GetCell(ExcelWorksheet sheet, int nRow, int nCol)
         {
             string sValue = "";
@@ -303,7 +377,11 @@ namespace QuanLyChiPhi.Common
                 return (double)sheet.Cells[nRow, nCol].Value;
             return 0;
         }
-
+        public static bool IsValidDecimalNumber(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return false;
+            return !s.Any(c => !(char.IsDigit(c) || c == '.')) && !(s.Count(c => c == '.') > 1);
+        }
         public static bool KiemTraInsertOrUpdate(string Id)
         {
             if (!string.IsNullOrEmpty(Id) && Id.Length > 5)
@@ -322,30 +400,6 @@ namespace QuanLyChiPhi.Common
             sheet1.Cells[nRowBegin, nColBegin, nRowEnd, nColEnd].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             sheet1.Cells[nRowBegin, nColBegin, nRowEnd, nColEnd].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
             sheet1.Cells[nRowBegin, nColBegin, nRowEnd, nColEnd].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-        }
-
-        public static bool KiemTraMaTrungExcel(ExcelWorksheet sheet1, ErrorMessage err)
-        {
-            List<string> Mas = new List<string>();
-            string sMaTrung = "";
-            for (int row = 3; row <= sheet1.Cells.End.Row; row++)
-            {
-                string sMa = Dungchung.GetCell(sheet1, row, 2);
-                if (sMa == "")
-                    break;
-                string sMaFind = Mas.Find(x => x == sMa);
-                if (sMaFind != null)
-                    sMaTrung += sMaFind + "; ";
-                else
-                    Mas.Add(sMa);
-            }
-            if (sMaTrung != "")
-            {
-                sMaTrung = "Mã trong tệp excel bị trùng: " + sMaTrung;
-                err.SetLoi(sMaTrung);
-                return false;
-            }
-            return true;
         }
     }
     public static class FileDinhKem
