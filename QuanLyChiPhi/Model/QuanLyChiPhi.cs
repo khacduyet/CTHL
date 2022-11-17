@@ -736,7 +736,7 @@ namespace QuanLyChiPhi.Model
                 return err;
             }
         }
-        public ErrorMessage ExportdmLoaiGoiThau(TimKiem itemTimKiem)
+        public ErrorMessage ExportCanHo(TimKiem itemTimKiem)
         {
             ErrorMessage err = new ErrorMessage(ErrorMessage.eState.ImportDuLieuThanhCong);
             try
@@ -749,27 +749,94 @@ namespace QuanLyChiPhi.Model
                 ExcelPackage package = new ExcelPackage(s);
                 ExcelWorksheet sheet1 = package.Workbook.Worksheets.First();
 
-                var danhmucs = _dbContext.CanHo.OrderBy(x => x.Ma).ToList();
-                var phuongtien = _dbContext.PhuongTien.ToList();
+                var danhmucs = _dbContext.CanHo.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
+                var ch_pts = _dbContext.CanHo_PhuongTien.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).ToList();
+                var phuongtiens = _dbContext.PhuongTien.ToList();
+                var loaixes = _dbContext.LoaiXe.ToList();
+
                 int nRow = 3;
                 int i = 1;
                 foreach (var danhmuc in danhmucs)
                 {
-                    sheet1.Cells[nRow, 1].Value = i;
-                    sheet1.Cells[nRow, 2].Value = danhmuc.Ma;
-                    sheet1.Cells[nRow, 3].Value = danhmuc.Ten;
-                    sheet1.Cells[nRow, 4].Value = danhmuc.GhiChu;
-                    nRow++;
-                    i++;
+                    var _ch_pts = ch_pts.FindAll(x => x.IdCanHo == danhmuc.Id);
+                    if (_ch_pts.Count > 1)
+                    {
+                        int rowMerge = _ch_pts.Count;
+                        sheet1.Cells[nRow, 1].Value = i;
+                        sheet1.Cells[nRow, 2].Value = danhmuc.Ma;
+                        sheet1.Cells[nRow, 3].Value = danhmuc.Ten;
+                        sheet1.Cells[nRow, 4].Value = danhmuc.ChuSoHuu;
+                        sheet1.Cells[nRow, 5].Value = danhmuc.SoDienThoai;
+                        sheet1.Cells[nRow, 6].Value = danhmuc.DienTich;
+                        sheet1.Cells[nRow, 10].Value = danhmuc.GhiChu;
+
+                        for (int j = 0; j < rowMerge; j++)
+                        {
+                            var phuongtien = phuongtiens.Find(x => x.Id == _ch_pts[j].IdPhuongTien);
+                            var loaixe = loaixes.Find(x => x.Id == _ch_pts[j].IdLoaiXe);
+                            if (phuongtien != null)
+                            {
+                                sheet1.Cells[nRow + j, 7].Value = phuongtien.Ma;
+                            }
+                            if (loaixe != null)
+                            {
+                                sheet1.Cells[nRow + j, 8].Value = loaixe.Ma;
+                            }
+                            sheet1.Cells[nRow + j, 9].Value = _ch_pts[j].BienKiemSoat;
+                        }
+
+                        sheet1.Cells[nRow, 1, nRow + rowMerge - 1, 1].Merge = true;
+                        sheet1.Cells[nRow, 2, nRow + rowMerge - 1, 2].Merge = true;
+                        sheet1.Cells[nRow, 3, nRow + rowMerge - 1, 3].Merge = true;
+                        sheet1.Cells[nRow, 4, nRow + rowMerge - 1, 4].Merge = true;
+                        sheet1.Cells[nRow, 5, nRow + rowMerge - 1, 5].Merge = true;
+                        sheet1.Cells[nRow, 6, nRow + rowMerge - 1, 6].Merge = true;
+                        sheet1.Cells[nRow, 10, nRow + rowMerge - 1, 10].Merge = true;
+                        if (_ch_pts.Count == 0)
+                        {
+                            nRow++;
+                        }
+                        else
+                        {
+                            nRow += _ch_pts.Count;
+                        }
+                        i++;
+                    }
+                    else
+                    {
+                        sheet1.Cells[nRow, 1].Value = i;
+                        sheet1.Cells[nRow, 2].Value = danhmuc.Ma;
+                        sheet1.Cells[nRow, 3].Value = danhmuc.Ten;
+                        sheet1.Cells[nRow, 4].Value = danhmuc.ChuSoHuu;
+                        sheet1.Cells[nRow, 5].Value = danhmuc.SoDienThoai;
+                        sheet1.Cells[nRow, 6].Value = danhmuc.DienTich;
+                        if (_ch_pts.Count > 0)
+                        {
+                            var phuongtien = phuongtiens.Find(x => x.Id == _ch_pts[0].IdPhuongTien);
+                            var loaixe = loaixes.Find(x => x.Id == _ch_pts[0].IdLoaiXe);
+                            if (phuongtien != null)
+                            {
+                                sheet1.Cells[nRow, 7].Value = phuongtien.Ma;
+                            }
+                            if (loaixe != null)
+                            {
+                                sheet1.Cells[nRow, 8].Value = loaixe.Ma;
+                            }
+                            sheet1.Cells[nRow, 9].Value = _ch_pts[0].BienKiemSoat;
+                        }
+                        sheet1.Cells[nRow, 10].Value = danhmuc.GhiChu;
+                        nRow++;
+                        i++;
+                    }
 
                 }
                 if (nRow > 3)
                 {
                     nRow--;
-                    sheet1.Cells[2, 3, nRow, 3].Style.WrapText = true;
-                    sheet1.Cells[2, 4, nRow, 4].Style.WrapText = true;
-                    sheet1.Cells[2, 5, nRow, 5].Style.WrapText = true;
-                    Dungchung.DrawTableExcel(sheet1, 4, nRow, 1, 6);
+                    //sheet1.Cells[2, 3, nRow, 3].Style.WrapText = true;
+                    //sheet1.Cells[2, 4, nRow, 4].Style.WrapText = true;
+                    //sheet1.Cells[2, 5, nRow, 5].Style.WrapText = true;
+                    Dungchung.DrawTableExcel(sheet1, 3, nRow, 1, 10);
                 }
                 s.Close();
 
@@ -904,6 +971,177 @@ namespace QuanLyChiPhi.Model
                 msg.SetLoi("Không tồn tại!");
             }
             return msg;
+        }
+
+        public ErrorMessage ImportXeNgoai(string FileName, string IdChungCu)
+        {
+            ErrorMessage err = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+            try
+            {
+                string sFileName = _appSettings.DuongDanUpload + FileName;
+                Stream s = File.OpenRead(sFileName);
+                ExcelPackage package = new ExcelPackage(s);
+                ExcelWorksheet sheet1 = package.Workbook.Worksheets.First();
+                List<string> Mas = _dbContext.XeNgoai.Select(x => x.Ma).ToList();
+                var listDanhMuc = new List<XeNgoai>();
+                if (!Dungchung.KiemTraMaTrungExcel(sheet1, err))
+                {
+                    err.Data = listDanhMuc;
+                    return err;
+                }
+
+                var listColumnName = new List<string>();
+                String[] ColumnNames = new String[] { "STT", "Mã", "Tên", "Số điện thoại", "Mã phương tiện", "Mã loại xe", "Biển kiểm soát", "Ghi Chú" };
+                listColumnName.AddRange(ColumnNames);
+                if (!Dungchung.KiemTraTempExcel(sheet1, err, listColumnName, "DANH SÁCH XE NGOÀI", 10))
+                    return err;
+
+                if (!Dungchung.KiemTraMaTrungDb(sheet1, err, Mas))
+                {
+                    err.Data = listDanhMuc;
+                    return err;
+                }
+
+                var phuongtiens = _dbContext.PhuongTien.ToList();
+                var loaixes = _dbContext.LoaiXe.ToList();
+
+                bool checkMaExist = false;
+
+                for (int row = 3; row <= sheet1.Cells.End.Row; row++)
+                {
+                    XeNgoai dm = new XeNgoai();
+                    dm.Ma = Dungchung.GetCell(sheet1, row, 2);
+
+                    if (dm.Ma == "")
+                        break;
+
+                    dm.Id = Guid.NewGuid().ToString();
+                    dm.Ten = Dungchung.GetCell(sheet1, row, 3);
+                    dm.SoDienThoai = Dungchung.GetCell(sheet1, row, 4);
+                    string MaPT = Dungchung.GetCell(sheet1, row, 5);
+                    string MaLX = Dungchung.GetCell(sheet1, row, 6);
+                    string BKS = Dungchung.GetCell(sheet1, row, 7);
+                    dm.BienKiemSoat = BKS;
+                    var phuongtien = phuongtiens.Find(x => x.Ma == MaPT);
+                    var loaixe = loaixes.Find(x => x.Ma == MaLX);
+                    if (phuongtien != null && loaixe != null)
+                    {
+                        dm.IdPhuongTien = phuongtien.Id;
+                        dm.IdLoaiXe = loaixe.Id;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(MaPT) && !string.IsNullOrEmpty(MaLX))
+                        {
+                            checkMaExist = true;
+                        }
+                    }
+                    dm.GhiChu = Dungchung.GetCell(sheet1, row, 8);
+                    dm.IdChungCu = IdChungCu;
+                    dm.TrangThai = true;
+                    listDanhMuc.Add(dm);
+                }
+
+                if (checkMaExist)
+                {
+                    err.SetLoi("Mã phương tiện hoặc mã loại xe không tồn tại, vui lòng kiểm tra lại!");
+                    return err;
+                }
+
+                var danhMucs = _dbContext.XeNgoai.ToList();
+                foreach (var item in listDanhMuc)
+                {
+                    XeNgoai dm = danhMucs.FirstOrDefault(x => x.Ma == item.Ma);
+                    if (dm == null)
+                        _dbContext.Add(item);
+                    else
+                    {
+                        dm.Ten = item.Ten;
+                        dm.GhiChu = item.GhiChu;
+                        _dbContext.Update(dm);
+                    }
+                }
+                _dbContext.SaveChanges();
+                s.Close();
+                err.Data = _dbContext.XeNgoai.OrderByDescending(x => x.Created).ToList();
+                return err;
+            }
+            catch (Exception e)
+            {
+                err.SetLoi("Importdm " + e.ToString());
+                return err;
+            }
+        }
+        public ErrorMessage ExportXeNgoai(TimKiem itemTimKiem)
+        {
+            ErrorMessage err = new ErrorMessage(ErrorMessage.eState.ImportDuLieuThanhCong);
+            try
+            {
+                string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "XeNgoai.xlsx");
+                DateTime dt = DateTime.Now;
+                string sFileNameCopy = _appSettings.DuongDanUpload + "XeNgoaiDownload_" + dt.ToOADate() + ".xlsx";
+                File.Copy(sFileName, sFileNameCopy, true);
+                Stream s = File.OpenRead(sFileNameCopy);
+                ExcelPackage package = new ExcelPackage(s);
+                ExcelWorksheet sheet1 = package.Workbook.Worksheets.First();
+
+                var danhmucs = _dbContext.XeNgoai.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
+                if (!String.IsNullOrEmpty(itemTimKiem.IdPhuongTien))
+                {
+                    danhmucs = danhmucs.FindAll(x => x.IdPhuongTien == itemTimKiem.IdPhuongTien);
+                }
+                if (!String.IsNullOrEmpty(itemTimKiem.IdLoaiXe))
+                {
+                    danhmucs = danhmucs.FindAll(x => x.IdLoaiXe == itemTimKiem.IdLoaiXe);
+                }
+                var ch_pts = _dbContext.CanHo_PhuongTien.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).ToList();
+                var phuongtiens = _dbContext.PhuongTien.ToList();
+                var loaixes = _dbContext.LoaiXe.ToList();
+
+                int nRow = 3;
+                int i = 1;
+                foreach (var danhmuc in danhmucs)
+                {
+                    sheet1.Cells[nRow, 1].Value = i;
+                    sheet1.Cells[nRow, 2].Value = danhmuc.Ma;
+                    sheet1.Cells[nRow, 3].Value = danhmuc.Ten;
+                    sheet1.Cells[nRow, 4].Value = danhmuc.SoDienThoai;
+                    var phuongtien = phuongtiens.Find(x => x.Id == danhmuc.IdPhuongTien);
+                    var loaixe = loaixes.Find(x => x.Id == danhmuc.IdLoaiXe);
+                    if (phuongtien != null)
+                    {
+                        sheet1.Cells[nRow, 5].Value = phuongtien.Ma;
+                    }
+                    if (loaixe != null)
+                    {
+                        sheet1.Cells[nRow, 6].Value = loaixe.Ma;
+                    }
+                    sheet1.Cells[nRow, 7].Value = danhmuc.BienKiemSoat;
+                    sheet1.Cells[nRow, 8].Value = danhmuc.GhiChu;
+                    nRow++;
+                    i++;
+                }
+                if (nRow > 3)
+                {
+                    nRow--;
+                    //sheet1.Cells[2, 3, nRow, 3].Style.WrapText = true;
+                    //sheet1.Cells[2, 4, nRow, 4].Style.WrapText = true;
+                    //sheet1.Cells[2, 5, nRow, 5].Style.WrapText = true;
+                    Dungchung.DrawTableExcel(sheet1, 3, nRow, 1, 8);
+                }
+                s.Close();
+
+                byte[] bytee = package.GetAsByteArray();
+                File.WriteAllBytes(sFileNameCopy, bytee);
+                err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("XeNgoai.xlsx")
+                                + "&path=" + Dungchung.Base64Encode(sFileNameCopy);
+                return err;
+            }
+            catch (Exception e)
+            {
+                err.SetLoi("ExportDanhMuc " + e.ToString());
+                return err;
+            }
         }
         #endregion
 

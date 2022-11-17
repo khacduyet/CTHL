@@ -357,6 +357,19 @@ namespace QuanLyChiPhi.Controllers
             else
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
+        [HttpPost("ExportCanHo")]
+        public async Task<IActionResult> ExportCanHo([FromBody] TimKiem itemTimKiem)
+        {
+            CurrentUser currUser = GetRequest("ExportCanHo");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.ExportCanHo(itemTimKiem);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
         #endregion
 
         #region  Xe ngoài
@@ -407,6 +420,33 @@ namespace QuanLyChiPhi.Controllers
             {
                 _QuanLyChiPhi.SetCurrentUser(currUser);
                 var listItem = _QuanLyChiPhi.DeleteXeNgoai(Id);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
+
+        [HttpGet("ImportXeNgoai")]
+        public async Task<IActionResult> ImportXeNgoai(string FileName, string IdChungCu)
+        {
+            CurrentUser currUser = GetRequest("ImportXeNgoai");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.ImportXeNgoai(FileName, IdChungCu);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
+        [HttpPost("ExportXeNgoai")]
+        public async Task<IActionResult> ExportXeNgoai([FromBody] TimKiem itemTimKiem)
+        {
+            CurrentUser currUser = GetRequest("ExportXeNgoai");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.ExportXeNgoai(itemTimKiem);
                 return Ok(listItem);
             }
             else
