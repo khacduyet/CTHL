@@ -70,7 +70,7 @@ app.MapPost("FileUploader/Post", (HttpRequest postRequest) =>
     foreach (var item in postRequest.Form.Files)
     {
         string extension = item.FileName.Split('.').Last();
-        var filenamebase64 = Dungchung.Base64Encode(item.FileName + Guid.NewGuid().ToString());
+        var filenamebase64 = Dungchung.Base64Encode(Guid.NewGuid().ToString() + item.FileName);
         var pathbase64 = Dungchung.Base64Encode(urlUpload + "/" + item.FileName);
         var path = filenamebase64 + "." + extension;
         using (var stream = new FileStream(urlUpload + path, FileMode.Create))
