@@ -68,6 +68,10 @@
               "target": "Package",
               "version": "[6.0.1, )"
             },
+            "MimeMapping": {
+              "target": "Package",
+              "version": "[1.0.1.50, )"
+            },
             "Quartz": {
               "target": "Package",
               "version": "[3.3.0, )"
