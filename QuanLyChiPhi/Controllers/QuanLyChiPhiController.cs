@@ -522,6 +522,19 @@ namespace QuanLyChiPhi.Controllers
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
 
+        [HttpPost("GetListFilterCreated")]
+        public async Task<IActionResult> GetListFilterCreated([FromBody] TaoNhanhPhieu data)
+        {
+            CurrentUser currUser = GetRequest("GetListFilterCreated");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.GetListFilterCreated(data);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
         [HttpPost("CreatePhieu")]
         public async Task<IActionResult> CreatePhieu([FromBody] TaoNhanhPhieu data)
         {

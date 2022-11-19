@@ -22,6 +22,7 @@ namespace QuanLyChiPhi.Entities
     public class TaoNhanhPhieu
     {
         public string IdChungCu { get; set; }
+        public bool isXeNgoai { get; set; }
     }
 }
 

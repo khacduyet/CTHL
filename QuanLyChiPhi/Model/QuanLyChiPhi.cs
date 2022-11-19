@@ -1282,6 +1282,73 @@ namespace QuanLyChiPhi.Model
             return msg;
         }
         // Lọc dữ liệu căn hộ và xe ngoài để tạo phiếu
+        public ErrorMessage GetListFilterCreated(TaoNhanhPhieu taoNhanh)
+        {
+            ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+            if (taoNhanh.isXeNgoai)
+            {
+                var data = _dbContext.XeNgoai.ToList();
+                if (!String.IsNullOrEmpty(taoNhanh.IdChungCu))
+                {
+                    data = data.FindAll(x => taoNhanh.IdChungCu == x.IdChungCu);
+                }
+                var current_time = DateTime.Now;
+                var current_month = current_time.Month;
+                var current_year = current_time.Year;
+
+                List<XeNgoai> DaCoPhieus = new List<XeNgoai>();
+                // Phiếu xe ngoài
+                var phieus = _dbContext.QuanLyPhi.Where(x => x.isGanNhat && x.IdChungCu == taoNhanh.IdChungCu && !x.isXeNgoai).ToList();
+                foreach (var item in data)
+                {
+                    var phieu = phieus.Find(x => x.IdCanHo == item.Id);
+                    if (phieu != null)
+                    {
+                        if (phieu.Created.Month == current_month && phieu.Created.Year == current_year)
+                        {
+                            DaCoPhieus.Add(item);
+                        }
+                    }
+                }
+                foreach (var item in DaCoPhieus)
+                {
+                    data.Remove(item);
+                }
+                msg.Data = data;
+            }
+            else
+            {
+                var data = _dbContext.CanHo.ToList();
+                if (!String.IsNullOrEmpty(taoNhanh.IdChungCu))
+                {
+                    data = data.FindAll(x => taoNhanh.IdChungCu == x.IdChungCu);
+                }
+                var current_time = DateTime.Now;
+                var current_month = current_time.Month;
+                var current_year = current_time.Year;
+
+                List<CanHo> DaCoPhieus = new List<CanHo>();
+                // Phiếu căn hộ
+                var phieus = _dbContext.QuanLyPhi.Where(x => x.isGanNhat && x.IdChungCu == taoNhanh.IdChungCu && !x.isXeNgoai).ToList();
+                foreach (var item in data)
+                {
+                    var phieu = phieus.Find(x => x.IdCanHo == item.Id);
+                    if (phieu != null)
+                    {
+                        if (phieu.Created.Month == current_month && phieu.Created.Year == current_year)
+                        {
+                            DaCoPhieus.Add(item);
+                        }
+                    }
+                }
+                foreach (var item in DaCoPhieus)
+                {
+                    data.Remove(item);
+                }
+                msg.Data = data;
+            }
+            return msg;
+        }
 
         // Tạo nhanh phiếu thu
         public string GetNextSoPhieuInList(List<QuanLyPhi> QuanLyPhi)
@@ -1330,7 +1397,7 @@ namespace QuanLyChiPhi.Model
                         }
                         if (phieu != null)
                         {
-                            if (phieu.Created.Month < current_month)
+                            if (phieu.Created.Month < current_month && phieu.Created.Year == current_year)
                             {
                                 var ch_pts = canho_phuongtiens.FindAll(x => x.IdCanHo == item.Id);
                                 string _ghiChu = "Phí dịch vụ T" + current_month + "/" + current_year + ", ";
