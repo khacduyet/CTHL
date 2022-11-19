@@ -446,10 +446,10 @@ namespace QuanLyChiPhi.Model
             if (!String.IsNullOrEmpty(timKiem.Keyword))
             {
                 data = data.FindAll(x =>
-                ((!String.IsNullOrEmpty(timKiem.Keyword) && (x.Ma.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
-                 x.Ten.ToLower().Trim() == timKiem.Keyword.ToLower().Trim() ||
-                (!String.IsNullOrEmpty(x.ChuSoHuu) && x.ChuSoHuu.ToLower().Trim() == timKiem.Keyword.ToLower().Trim()) ||
-                 x.SoDienThoai.ToLower().Trim() == timKiem.Keyword.ToLower().Trim()))));
+                (x.Ma.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim()) ||
+                 x.Ten.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim()) ||
+                (!String.IsNullOrEmpty(x.ChuSoHuu) && x.ChuSoHuu.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim())) ||
+                 x.SoDienThoai.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim())));
             }
             msg.Data = data;
             return msg;
@@ -1281,7 +1281,7 @@ namespace QuanLyChiPhi.Model
             }
             return msg;
         }
-
+        // Lọc dữ liệu căn hộ và xe ngoài để tạo phiếu
 
         // Tạo nhanh phiếu thu
         public string GetNextSoPhieuInList(List<QuanLyPhi> QuanLyPhi)
