@@ -1,11 +1,11 @@
 ﻿<Properties StartupConfiguration="{D52A3D22-EAFE-4EE4-9597-CF9E643B42FD}|Default">
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workbench ActiveDocument="QuanLyChiPhi/Entities/ChungCu.cs">
+  <MonoDevelop.Ide.ItemProperties.QuanLyChiPhi PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="QuanLyChiPhi/appsettings.json">
     <Files>
-      <File FileName="QuanLyChiPhi/Entities/ChungCu.cs" Line="31" Column="40" />
+      <File FileName="QuanLyChiPhi/Entities/ChungCu.cs" Line="24" Column="6" />
+      <File FileName="QuanLyChiPhi/Program.cs" Line="1" Column="1" />
+      <File FileName="QuanLyChiPhi/appsettings.json" Line="16" Column="5" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -23,7 +23,9 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.QuanLyChiPhi PreferredExecutionTarget="/Applications/Google Chrome.app" />
 </Properties>
