@@ -578,6 +578,19 @@ namespace QuanLyChiPhi.Controllers
             else
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
+        [HttpPost("SetDongPhiMultiple")]
+        public async Task<IActionResult> SetDongPhiMultiple([FromBody] List<string> Ids)
+        {
+            CurrentUser currUser = GetRequest("SetDongPhiMultiple");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.SetDongPhiMultiple(Ids);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
         #endregion
 
     }

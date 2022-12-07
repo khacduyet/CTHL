@@ -1673,6 +1673,24 @@ namespace QuanLyChiPhi.Model
                 msg.SetLoi("Không tồn tại!");
             return msg;
         }
+        public ErrorMessage SetDongPhiMultiple(List<string> Ids)
+        {
+            ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+            var datas = _dbContext.QuanLyPhi.Where(x => Ids.Contains(x.Id)).ToList();
+            if (datas.Count > 0)
+            {
+                foreach (var item in datas)
+                {
+                    item.TrangThai = true;
+                }
+                _dbContext.UpdateRange(datas);
+                _dbContext.SaveChanges();
+                msg.Data = datas;
+            }
+            else
+                msg.SetLoi("Không tồn tại!");
+            return msg;
+        }
         #endregion
     }
 }
