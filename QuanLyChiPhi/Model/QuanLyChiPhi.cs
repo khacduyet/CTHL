@@ -1658,7 +1658,21 @@ namespace QuanLyChiPhi.Model
             return msg;
         }
         // Xác nhận đóng phí
-
+        public ErrorMessage SetDongPhi(string Id)
+        {
+            ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+            var data = _dbContext.QuanLyPhi.AsNoTracking().FirstOrDefault(x => x.Id == Id);
+            if (data != null)
+            {
+                data.TrangThai = true;
+                _dbContext.Update(data);
+                _dbContext.SaveChanges();
+                msg.Data = data;
+            }
+            else
+                msg.SetLoi("Không tồn tại!");
+            return msg;
+        }
         #endregion
     }
 }

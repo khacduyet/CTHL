@@ -563,6 +563,21 @@ namespace QuanLyChiPhi.Controllers
             else
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
+
+        // Set đóng phí
+        [HttpGet("SetDongPhi")]
+        public async Task<IActionResult> SetDongPhi(string Id)
+        {
+            CurrentUser currUser = GetRequest("SetDongPhi");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.SetDongPhi(Id);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
         #endregion
 
     }
