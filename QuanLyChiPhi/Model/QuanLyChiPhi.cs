@@ -461,12 +461,14 @@ namespace QuanLyChiPhi.Model
             if (data != null)
             {
                 var phuongtiens = _dbContext.PhuongTien.ToList();
+                var loaixes = _dbContext.LoaiXe.ToList();
                 var canho_phuongtiens = _dbContext.CanHo_PhuongTien.Where(x => x.IdCanHo == data.Id).ToList();
                 List<Model_PhuongTien> models = new List<Model_PhuongTien>();
                 foreach (var item in canho_phuongtiens)
                 {
                     Model_PhuongTien model = new Model_PhuongTien();
                     var phuongtien = phuongtiens.Find(x => x.Id == item.IdPhuongTien);
+                    var loaixe = loaixes.Find(x => x.Id == item.IdLoaiXe);
                     if (phuongtien != null)
                     {
                         model.IdPhuongTien = phuongtien.Id;
@@ -475,8 +477,12 @@ namespace QuanLyChiPhi.Model
                         model.BienKiemSoat = item.BienKiemSoat ?? "";
                         model.IdLoaiXe = item.IdLoaiXe;
                         model.TrangThai = item.TrangThai;
-                        models.Add(model);
                     }
+                    if (loaixe != null)
+                    {
+                        model.TenLoaiXe = loaixe.Ten;
+                    }
+                    models.Add(model);
                 }
                 data.PhuongTiens = models;
                 msg.Data = data;
@@ -909,6 +915,16 @@ namespace QuanLyChiPhi.Model
             var data = _dbContext.XeNgoai.Find(Id);
             if (data != null)
             {
+                var LoaiXe = _dbContext.LoaiXe.Find(data.IdLoaiXe);
+                if (LoaiXe != null)
+                {
+                    data.TenLoaiXe = LoaiXe.Ten;
+                }
+                var PhuongTien = _dbContext.PhuongTien.Find(data.IdPhuongTien);
+                if (PhuongTien != null)
+                {
+                    data.TenPhuongTien = PhuongTien.Ten;
+                }
                 msg.Data = data;
             }
             else
@@ -1223,6 +1239,7 @@ namespace QuanLyChiPhi.Model
             var data = _dbContext.QuanLyPhi.Find(Id);
             if (data != null)
             {
+                data.ListPhi = GetThongTinPhieuThu(data.isXeNgoai ? data.IdXeNgoai : data.IdCanHo, data.isXeNgoai).Data;
                 msg.Data = data;
             }
             else
@@ -1571,7 +1588,75 @@ namespace QuanLyChiPhi.Model
                 }
             }
         }
-
+        public ErrorMessage GetThongTinPhieuThu(string Id, bool isXeNgoai)
+        {
+            string tPhi = "Phí ";
+            ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+            var loaixes = _dbContext.LoaiXe.ToList();
+            List<ModelQuanLyPhi> rs = new List<ModelQuanLyPhi>();
+            if (isXeNgoai)
+            {
+                var XeNgoai = GetXeNgoai(Id).Data;
+                if (XeNgoai != null)
+                {
+                    ModelQuanLyPhi obj = new ModelQuanLyPhi();
+                    var loaixe = loaixes.Find(x => x.Id == XeNgoai.IdLoaiXe);
+                    obj.TenDichVu = tPhi + XeNgoai.TenPhuongTien;
+                    obj.PhuongTien = XeNgoai.TenPhuongTien;
+                    obj.LoaiXe = XeNgoai.TenLoaiXe;
+                    obj.BienKiemSoat = XeNgoai.BienKiemSoat;
+                    if (loaixe != null)
+                    {
+                        obj.Gia = loaixe.DonGia ?? 0;
+                    }
+                    obj.SoLuong = 1;
+                    obj.ThanhTien = obj.SoLuong * obj.Gia;
+                    rs.Add(obj);
+                }
+            }
+            else
+            {
+                CanHo CanHo = GetCanHo(Id).Data;
+                if (CanHo != null)
+                {
+                    var LoaiDichVus = _dbContext.LoaiDichVu.Where(x => x.TrangThai).ToList();
+                    foreach (var item in LoaiDichVus)
+                    {
+                        ModelQuanLyPhi obj = new ModelQuanLyPhi();
+                        var loaidichvu = LoaiDichVus.Find(x => x.Id == item.Id && x.TrangThai);
+                        if (loaidichvu != null)
+                        {
+                            obj.TenDichVu = tPhi + loaidichvu.Ten;
+                            obj.Gia = loaidichvu.DonGia ?? 0;
+                        }
+                        obj.PhuongTien = "-";
+                        obj.LoaiXe = "-";
+                        obj.BienKiemSoat = "-";
+                        obj.SoLuong = CanHo.DienTich ?? 1;
+                        obj.ThanhTien = obj.SoLuong * obj.Gia;
+                        rs.Add(obj);
+                    }
+                    foreach (var item in CanHo.PhuongTiens)
+                    {
+                        ModelQuanLyPhi obj = new ModelQuanLyPhi();
+                        var loaixe = loaixes.Find(x => x.Id == item.IdLoaiXe);
+                        obj.TenDichVu = tPhi + item.TenPhuongTien;
+                        obj.PhuongTien = item.TenPhuongTien;
+                        obj.LoaiXe = item.TenLoaiXe;
+                        obj.BienKiemSoat = item.BienKiemSoat;
+                        if (loaixe != null)
+                        {
+                            obj.Gia = loaixe.DonGia ?? 0;
+                        }
+                        obj.SoLuong = 1;
+                        obj.ThanhTien = obj.SoLuong * obj.Gia;
+                        rs.Add(obj);
+                    }
+                }
+            }
+            msg.Data = rs;
+            return msg;
+        }
         // Xác nhận đóng phí
 
         #endregion

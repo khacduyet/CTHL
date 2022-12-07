@@ -67,6 +67,7 @@ namespace QuanLyChiPhi.Entities
         public string? IdLoaiXe { get; set; }
         public string MaPhuongTien { get; set; }
         public string TenPhuongTien { get; set; }
+        public string TenLoaiXe { get; set; }
         public string BienKiemSoat { get; set; }
         public bool TrangThai { get; set; }
     }
@@ -113,6 +114,7 @@ namespace QuanLyChiPhi.Entities
         public double? TongTien { get; set; }
         public string? GhiChu { get; set; }
         public bool TrangThai { get; set; }
+        public string? SoDienThoai { get; set; }
 
         // Căn hộ
         public string? IdCanHo { get; set; }
@@ -136,6 +138,19 @@ namespace QuanLyChiPhi.Entities
         public string? TenLoaiXe { get; set; }
         [NotMapped]
         public string? TenCanHo { get; set; }
+        [NotMapped]
+        public List<ModelQuanLyPhi> ListPhi { get; set; }
+    }
+
+    public class ModelQuanLyPhi
+    {
+        public string TenDichVu { get; set; }
+        public string PhuongTien { get; set; }
+        public string LoaiXe { get; set; }
+        public string BienKiemSoat { get; set; }
+        public double SoLuong { get; set; }
+        public double Gia { get; set; }
+        public double ThanhTien { get; set; }
     }
 
 }
