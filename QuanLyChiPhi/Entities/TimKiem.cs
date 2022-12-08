@@ -14,6 +14,7 @@ namespace QuanLyChiPhi.Entities
         public string Keyword { get; set; }
         public string IdChungCu { get; set; }
         public int Thang { get; set; }
+        public int Nam { get; set; }
         public string IdLoaiXe { get; set; }
         public int DaDongPhi { get; set; }
         public int LoaiNguoiDung { get; set; }

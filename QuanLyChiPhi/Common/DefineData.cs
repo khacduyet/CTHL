@@ -19,6 +19,16 @@
         {
 
         }
+        public enum ePay
+        {
+            TIENMAT,
+            CHUYENKHOAN
+        }
+        public enum eLoai
+        {
+            DANCU,
+            XENGOAI
+        }
         public enum eTable
         {
             QUANLYDONGPHI

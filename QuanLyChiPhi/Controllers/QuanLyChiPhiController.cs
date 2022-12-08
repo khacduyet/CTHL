@@ -591,6 +591,21 @@ namespace QuanLyChiPhi.Controllers
             else
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
+
+        // Xuất file excel
+        [HttpPost("ExportPhieuThu")]
+        public async Task<IActionResult> ExportPhieuThu([FromBody] TimKiemPhieu timKiem)
+        {
+            CurrentUser currUser = GetRequest("ExportPhieuThu");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.ExportPhieuThu(timKiem);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
         #endregion
 
     }

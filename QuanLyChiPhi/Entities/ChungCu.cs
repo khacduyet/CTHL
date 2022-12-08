@@ -130,6 +130,7 @@ namespace QuanLyChiPhi.Entities
         public string? IdChungCu { get; set; }
         public bool isXeNgoai { get; set; }
         public bool isGanNhat { get; set; } = true;
+        public string? Pay { get; set; }
         [NotMapped]
         public string? TenChungCu { get; set; }
         [NotMapped]

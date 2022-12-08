@@ -1,15 +1,11 @@
 ﻿<Properties StartupConfiguration="{D52A3D22-EAFE-4EE4-9597-CF9E643B42FD}|Default">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.QuanLyChiPhi PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="QuanLyChiPhi/appsettings.json">
+  <MonoDevelop.Ide.Workbench ActiveDocument="QuanLyChiPhi/Controllers/QuanLyChiPhiController.cs">
     <Files>
-      <File FileName="QuanLyChiPhi/Model/QuanLyChiPhi.cs" Line="556" Column="10" />
-      <File FileName="QuanLyChiPhi/Entities/ChungCu.cs" Line="112" Column="38" />
-      <File FileName="QuanLyChiPhi/Program.cs" Line="1" Column="1" />
-      <File FileName="QuanLyChiPhi/appsettings.json" Line="23" Column="7" />
+      <File FileName="QuanLyChiPhi/Model/QuanLyChiPhi.cs" Line="1676" Column="47" />
+      <File FileName="QuanLyChiPhi/Entities/ChungCu.cs" Line="121" Column="22" />
+      <File FileName="QuanLyChiPhi/Controllers/QuanLyChiPhiController.cs" Line="567" Column="24" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -18,6 +14,7 @@
             <Node name="QuanLyChiPhi" expanded="True">
               <Node name="Controllers" expanded="True" />
               <Node name="Entities" expanded="True" />
+              <Node name="Migrations" expanded="True" />
               <Node name="Model" expanded="True" />
             </Node>
           </Node>
@@ -28,6 +25,9 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
 </Properties>
