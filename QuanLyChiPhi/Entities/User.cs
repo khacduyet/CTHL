@@ -9,5 +9,13 @@
         public string Email { get; set; }
         public string DienThoai { get; set; }
         public bool IsLocked { get; set; }
+        public string Permission { get; set; }
+    }
+
+    public class Permission : Auditable
+    {
+        public string MaQuyen { get; set; }
+        public string TenQuyen { get; set; }
+        public int Level { get; set; }
     }
 }

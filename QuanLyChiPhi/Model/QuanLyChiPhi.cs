@@ -24,7 +24,90 @@ namespace QuanLyChiPhi.Model
             _dbContext.currentUser = currentUser;
         }
 
+        #region User
+        public ErrorMessage GetListUser()
+        {
+            ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+            var data = from user in _dbContext.User
+                       join permission in _dbContext.Permission on user.Permission equals permission.Id
+                       where permission.Level < _dbContext.currentUser.Level
+                       select user;
+            msg.Data = data;
+            return msg;
+        }
+        public ErrorMessage GetUser(string Id)
+        {
+            ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+            var data = _dbContext.User.Find(Id);
+            if (data != null)
+            {
+                msg.Data = data;
+            }
+            else
+            {
+                msg.SetLoi("Không tồn tại người dùng này!");
+            }
+            return msg;
+        }
+        public ErrorMessage SetUser(User data)
+        {
+            using (var trans = _dbContext.Database.BeginTransaction())
+            {
+                ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+                try
+                {
 
+                    if (string.IsNullOrEmpty(data.Id))
+                    {
+                        var checkMa = _dbContext.User.AsNoTracking().FirstOrDefault(x => x.MaNhanVien == data.MaNhanVien);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.MaNhanVien);
+                            trans.Rollback();
+                            return msg;
+                        }
+                        data.Id = Guid.NewGuid().ToString();
+                        _dbContext.Add(data);
+                    }
+                    else
+                    {
+                        var checkMa = _dbContext.User.AsNoTracking().FirstOrDefault(x => x.MaNhanVien == data.MaNhanVien && x.Id != data.Id);
+                        if (checkMa != null)
+                        {
+                            msg.SetLoi("Đã tồn tại mã: " + checkMa.MaNhanVien);
+                            trans.Rollback();
+                            return msg;
+                        }
+                        _dbContext.Update(data);
+                    }
+                    _dbContext.SaveChanges();
+                    trans.Commit();
+                    return msg;
+                }
+                catch (Exception)
+                {
+                    msg.SetLoi("Đã có lỗi xảy ra!");
+                    trans.Rollback();
+                    return msg;
+                }
+            }
+        }
+        public ErrorMessage DeleteUser(string Id)
+        {
+            ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
+            var data = _dbContext.User.Find(Id);
+            if (data != null)
+            {
+                _dbContext.Remove(data);
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                msg.SetLoi("Không tồn tại người dùng này!");
+            }
+            return msg;
+        }
+        #endregion
 
         #region Chung cư
         public ErrorMessage GetListChungCu()

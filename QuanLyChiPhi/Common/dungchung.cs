@@ -207,6 +207,7 @@ namespace QuanLyChiPhi.Common
         public string Email { get; set; }
         public string DienThoai { get; set; }
         public bool IsLocked { get; set; }
+        public int Level { get; set; }
         public CurrentUser() { }
         public CurrentUser(string Id)
         {

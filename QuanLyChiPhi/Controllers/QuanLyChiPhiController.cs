@@ -16,6 +16,61 @@ namespace QuanLyChiPhi.Controllers
             _QuanLyChiPhi = QuanLyChiPhi;
         }
 
+        #region User
+        [HttpGet("GetListUser")]
+        public async Task<IActionResult> GetListUser()
+        {
+            CurrentUser currUser = GetRequest("GetListUser");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.GetListUser();
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
+        [HttpGet("GetUser")]
+        public async Task<IActionResult> GetUser(string Id)
+        {
+            CurrentUser currUser = GetRequest("GetUser");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.GetUser(Id);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
+        [HttpPost("SetUser")]
+        public async Task<IActionResult> SetUser([FromBody] User data)
+        {
+            CurrentUser currUser = GetRequest("SetUser");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.SetUser(data);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
+        [HttpGet("DeleteUser")]
+        public async Task<IActionResult> DeleteUser(string Id)
+        {
+            CurrentUser currUser = GetRequest("DeleteUser");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.DeleteUser(Id);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
+        #endregion
+
         #region Chung cư
         [HttpGet("GetListChungCu")]
         public async Task<IActionResult> GetListChungCu()
