@@ -151,6 +151,7 @@ namespace QuanLyChiPhi.Entities
         public string BienKiemSoat { get; set; }
         public double SoLuong { get; set; }
         public double Gia { get; set; }
+        public int DonVi { get; set; }
         public double ThanhTien { get; set; }
     }
 

@@ -1243,7 +1243,7 @@ namespace QuanLyChiPhi.Model
             var data = _dbContext.QuanLyPhi.Find(Id);
             if (data != null)
             {
-                data.ListPhi = GetThongTinPhieuThu(data.isXeNgoai ? data.IdXeNgoai : data.IdCanHo, data.isXeNgoai).Data;
+                data.ListPhi = GetThongTinPhieuThu(data.isXeNgoai ? data.IdXeNgoai : data.IdCanHo, data.isXeNgoai, data.LoaiDongPhi).Data;
                 msg.Data = data;
             }
             else
@@ -1663,7 +1663,7 @@ namespace QuanLyChiPhi.Model
                 }
             }
         }
-        public ErrorMessage GetThongTinPhieuThu(string Id, bool isXeNgoai)
+        public ErrorMessage GetThongTinPhieuThu(string Id, bool isXeNgoai, string LoaiDongPhi)
         {
             string tPhi = "Phí ";
             ErrorMessage msg = new ErrorMessage(ErrorMessage.eState.ThanhCong);
@@ -1685,7 +1685,19 @@ namespace QuanLyChiPhi.Model
                         obj.Gia = loaixe.DonGia ?? 0;
                     }
                     obj.SoLuong = 1;
-                    obj.ThanhTien = obj.SoLuong * obj.Gia;
+                    switch (LoaiDongPhi)
+                    {
+                        case "QUY":
+                            obj.DonVi = 3;
+                            break;
+                        case "NAM":
+                            obj.DonVi = 12;
+                            break;
+                        default:
+                            obj.DonVi = 1;
+                            break;
+                    }
+                    obj.ThanhTien = obj.SoLuong * obj.Gia * obj.DonVi;
                     rs.Add(obj);
                 }
             }
@@ -1708,7 +1720,19 @@ namespace QuanLyChiPhi.Model
                         obj.LoaiXe = "-";
                         obj.BienKiemSoat = "-";
                         obj.SoLuong = CanHo.DienTich ?? 1;
-                        obj.ThanhTien = obj.SoLuong * obj.Gia;
+                        switch (LoaiDongPhi)
+                        {
+                            case "QUY":
+                                obj.DonVi = 3;
+                                break;
+                            case "NAM":
+                                obj.DonVi = 12;
+                                break;
+                            default:
+                                obj.DonVi = 1;
+                                break;
+                        }
+                        obj.ThanhTien = obj.SoLuong * obj.Gia * obj.DonVi;
                         rs.Add(obj);
                     }
                     foreach (var item in CanHo.PhuongTiens)
@@ -1724,7 +1748,19 @@ namespace QuanLyChiPhi.Model
                             obj.Gia = loaixe.DonGia ?? 0;
                         }
                         obj.SoLuong = 1;
-                        obj.ThanhTien = obj.SoLuong * obj.Gia;
+                        switch (LoaiDongPhi)
+                        {
+                            case "QUY":
+                                obj.DonVi = 3;
+                                break;
+                            case "NAM":
+                                obj.DonVi = 12;
+                                break;
+                            default:
+                                obj.DonVi = 1;
+                                break;
+                        }
+                        obj.ThanhTien = obj.SoLuong * obj.Gia * obj.DonVi;
                         rs.Add(obj);
                     }
                 }

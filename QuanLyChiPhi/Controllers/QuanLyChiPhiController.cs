@@ -551,13 +551,13 @@ namespace QuanLyChiPhi.Controllers
         }
 
         [HttpGet("GetThongTinPhieuThu")]
-        public async Task<IActionResult> GetThongTinPhieuThu(string Id, bool isXeNgoai)
+        public async Task<IActionResult> GetThongTinPhieuThu(string Id, bool isXeNgoai, string LoaiDongPhi)
         {
             CurrentUser currUser = GetRequest("GetThongTinPhieuThu");
             if (!string.IsNullOrEmpty(currUser.Id))
             {
                 _QuanLyChiPhi.SetCurrentUser(currUser);
-                var listItem = _QuanLyChiPhi.GetThongTinPhieuThu(Id, isXeNgoai);
+                var listItem = _QuanLyChiPhi.GetThongTinPhieuThu(Id, isXeNgoai, LoaiDongPhi);
                 return Ok(listItem);
             }
             else
