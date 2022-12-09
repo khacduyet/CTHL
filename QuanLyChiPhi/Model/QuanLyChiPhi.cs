@@ -1963,6 +1963,105 @@ namespace QuanLyChiPhi.Model
                 return err;
             }
         }
+
+        // In phiếu
+        public ErrorMessage ExportPrintPhieuThu(string Id)
+        {
+            ErrorMessage err = new ErrorMessage(ErrorMessage.eState.ImportDuLieuThanhCong);
+            try
+            {
+                string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "MauPhieuThu.xlsx");
+                DateTime dt = DateTime.Now;
+                string sFileNameCopy = _appSettings.DuongDanUpload + "MauPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
+                File.Copy(sFileName, sFileNameCopy, true);
+                Stream s = File.OpenRead(sFileNameCopy);
+                ExcelPackage package = new ExcelPackage(s);
+                ExcelWorksheet sheet1 = package.Workbook.Worksheets.First();
+
+                QuanLyPhi quanLyPhi = GetQuanLyPhi(Id).Data;
+                CanHo canHo = _dbContext.CanHo.FirstOrDefault(x => x.Id == quanLyPhi.IdCanHo);
+                DateTime dateTime = DateTime.Now;
+                var loaixes = _dbContext.LoaiXe.ToList();
+                var phuongtiens = _dbContext.PhuongTien.ToList();
+                var chungcu = _dbContext.ChungCu.FirstOrDefault(x => x.Id == quanLyPhi.IdChungCu);
+
+                sheet1.Cells[7, 3].Value = quanLyPhi.NguoiDongPhi;
+                sheet1.Cells[5, 3].Value = "Ngày " + dateTime.Date + " tháng " + dateTime.Month + " năm " + dateTime.Year;
+                sheet1.Cells[5, 9].Value = quanLyPhi.SoPhieu;
+                sheet1.Cells[8, 3].Value = quanLyPhi.isXeNgoai ? "" : canHo.Ten + " - " + chungcu.Ten;
+                sheet1.Cells[9, 3].Value = quanLyPhi.GhiChu;
+                sheet1.Cells[10, 3].Value = quanLyPhi.TongTien;
+                sheet1.Cells[11, 3].Value = "Bằng chữ";
+                sheet1.Cells[18, 7].Value = _dbContext.currentUser.TenNhanVien;
+                sheet1.Cells[18, 9].Value = quanLyPhi.NguoiDongPhi;
+
+                //Dungchung.DrawTableExcel(sheet1, 3, nRow, 1, 13);
+                s.Close();
+
+                byte[] bytee = package.GetAsByteArray();
+                File.WriteAllBytes(sFileNameCopy, bytee);
+                err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("MauPhieuThu.xlsx")
+                                + "&path=" + Dungchung.Base64Encode(sFileNameCopy);
+                return err;
+            }
+            catch (Exception e)
+            {
+                err.SetLoi("ExportDanhMuc " + e.ToString());
+                return err;
+            }
+        }
+
+        public ErrorMessage ExportPrintAllPhieuThu(TimKiemPhieu itemTimKiem)
+        {
+            ErrorMessage err = new ErrorMessage(ErrorMessage.eState.ImportDuLieuThanhCong);
+            try
+            {
+                string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "MauPhieuThu.xlsx");
+                DateTime dt = DateTime.Now;
+                string sFileNameCopy = _appSettings.DuongDanUpload + "MauPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
+                File.Copy(sFileName, sFileNameCopy, true);
+                Stream s = File.OpenRead(sFileNameCopy);
+                ExcelPackage package = new ExcelPackage(s);
+                ExcelWorksheet sheet1 = package.Workbook.Worksheets["Phiếu mẫu"];
+
+                itemTimKiem.DaDongPhi = 0;
+                List<QuanLyPhi> quanLyPhis = GetListQuanLyPhi(itemTimKiem).Data;
+
+                List<CanHo> canHos = _dbContext.CanHo.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).ToList();
+                DateTime dateTime = DateTime.Now;
+                var loaixes = _dbContext.LoaiXe.ToList();
+                var phuongtiens = _dbContext.PhuongTien.ToList();
+                var chungcu = _dbContext.ChungCu.FirstOrDefault(x => x.Id == itemTimKiem.IdChungCu);
+
+                foreach (var quanLyPhi in quanLyPhis)
+                {
+                    CanHo canHo = canHos.Find(x => x.Id == quanLyPhi.IdCanHo);
+                    ExcelWorksheet sheetN = package.Workbook.Worksheets.Copy("Phiếu mẫu", canHo.Ten);
+                    sheetN.Cells[7, 3].Value = quanLyPhi.NguoiDongPhi;
+                    sheetN.Cells[5, 3].Value = "Ngày " + dateTime.Date + " tháng " + dateTime.Month + " năm " + dateTime.Year;
+                    sheetN.Cells[5, 9].Value = quanLyPhi.SoPhieu;
+                    sheetN.Cells[8, 3].Value = quanLyPhi.isXeNgoai ? "" : canHo.Ten + " - " + chungcu.Ten;
+                    sheetN.Cells[9, 3].Value = quanLyPhi.GhiChu;
+                    sheetN.Cells[10, 3].Value = quanLyPhi.TongTien;
+                    sheetN.Cells[11, 3].Value = "Bằng chữ";
+                    sheetN.Cells[18, 7].Value = _dbContext.currentUser.TenNhanVien;
+                    sheetN.Cells[18, 9].Value = quanLyPhi.NguoiDongPhi;
+                }
+
+                s.Close();
+
+                byte[] bytee = package.GetAsByteArray();
+                File.WriteAllBytes(sFileNameCopy, bytee);
+                err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("MauPhieuThu.xlsx")
+                                + "&path=" + Dungchung.Base64Encode(sFileNameCopy);
+                return err;
+            }
+            catch (Exception e)
+            {
+                err.SetLoi("ExportDanhMuc " + e.ToString());
+                return err;
+            }
+        }
         #endregion
     }
 }

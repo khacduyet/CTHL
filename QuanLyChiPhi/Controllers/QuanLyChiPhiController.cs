@@ -606,6 +606,32 @@ namespace QuanLyChiPhi.Controllers
             else
                 return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
         }
+        [HttpGet("ExportPrintPhieuThu")]
+        public async Task<IActionResult> ExportPrintPhieuThu(string Id)
+        {
+            CurrentUser currUser = GetRequest("ExportPrintPhieuThu");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.ExportPrintPhieuThu(Id);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
+        [HttpPost("ExportPrintAllPhieuThu")]
+        public async Task<IActionResult> ExportPrintAllPhieuThu([FromBody] TimKiemPhieu timKiem)
+        {
+            CurrentUser currUser = GetRequest("ExportPrintAllPhieuThu");
+            if (!string.IsNullOrEmpty(currUser.Id))
+            {
+                _QuanLyChiPhi.SetCurrentUser(currUser);
+                var listItem = _QuanLyChiPhi.ExportPrintAllPhieuThu(timKiem);
+                return Ok(listItem);
+            }
+            else
+                return Ok(new ErrorMessage(ErrorMessage.eState.ChuaDangNhap));
+        }
         #endregion
 
     }
