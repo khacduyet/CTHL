@@ -2112,26 +2112,36 @@ namespace QuanLyChiPhi.Model
                 File.Copy(sFileName, sFileNameCopy, true);
                 Stream s = File.OpenRead(sFileNameCopy);
                 ExcelPackage package = new ExcelPackage(s);
-                ExcelWorksheet sheet1 = package.Workbook.Worksheets.First();
 
                 QuanLyPhi quanLyPhi = GetQuanLyPhi(Id).Data;
                 CanHo canHo = _dbContext.CanHo.FirstOrDefault(x => x.Id == quanLyPhi.IdCanHo);
+                ExcelWorksheet sheet1 = package.Workbook.Worksheets.Copy("Phiếu mẫu", "Phiếu thu" + "-T" + quanLyPhi.Thang);
+
                 DateTime dateTime = DateTime.Now;
                 var loaixes = _dbContext.LoaiXe.ToList();
                 var phuongtiens = _dbContext.PhuongTien.ToList();
                 var chungcu = _dbContext.ChungCu.FirstOrDefault(x => x.Id == quanLyPhi.IdChungCu);
 
                 sheet1.Cells[7, 3].Value = quanLyPhi.NguoiDongPhi;
-                sheet1.Cells[5, 3].Value = "Ngày " + dateTime.Date + " tháng " + dateTime.Month + " năm " + dateTime.Year;
+                sheet1.Cells[5, 2].Value = "Ngày " + dateTime.Day + " tháng " + dateTime.Month + " năm " + dateTime.Year;
                 sheet1.Cells[5, 9].Value = quanLyPhi.SoPhieu;
                 sheet1.Cells[8, 3].Value = quanLyPhi.isXeNgoai ? "" : canHo.Ten + " - " + chungcu.Ten;
                 sheet1.Cells[9, 3].Value = quanLyPhi.GhiChu;
                 sheet1.Cells[10, 3].Value = quanLyPhi.TongTien;
-                sheet1.Cells[11, 3].Value = "Bằng chữ";
+                sheet1.Cells[11, 3].Value = Dungchung.Capitalize(Dungchung.NumberToText(quanLyPhi.TongTien ?? 0));
                 sheet1.Cells[18, 7].Value = _dbContext.currentUser.TenNhanVien;
                 sheet1.Cells[18, 9].Value = quanLyPhi.NguoiDongPhi;
 
-                //Dungchung.DrawTableExcel(sheet1, 3, nRow, 1, 13);
+
+                sheet1.Cells[34, 3].Value = quanLyPhi.NguoiDongPhi;
+                sheet1.Cells[32, 2].Value = "Ngày " + dateTime.Day + " tháng " + dateTime.Month + " năm " + dateTime.Year;
+                sheet1.Cells[32, 9].Value = quanLyPhi.SoPhieu;
+                sheet1.Cells[35, 3].Value = quanLyPhi.isXeNgoai ? "" : canHo.Ten + " - " + chungcu.Ten;
+                sheet1.Cells[36, 3].Value = quanLyPhi.GhiChu;
+                sheet1.Cells[37, 3].Value = quanLyPhi.TongTien;
+                sheet1.Cells[38, 3].Value = Dungchung.Capitalize(Dungchung.NumberToText(quanLyPhi.TongTien ?? 0));
+                sheet1.Cells[45, 7].Value = _dbContext.currentUser.TenNhanVien;
+                sheet1.Cells[45, 9].Value = quanLyPhi.NguoiDongPhi;
                 s.Close();
 
                 byte[] bytee = package.GetAsByteArray();
@@ -2172,16 +2182,27 @@ namespace QuanLyChiPhi.Model
                 foreach (var quanLyPhi in quanLyPhis)
                 {
                     CanHo canHo = canHos.Find(x => x.Id == quanLyPhi.IdCanHo);
-                    ExcelWorksheet sheetN = package.Workbook.Worksheets.Copy("Phiếu mẫu", canHo.Ten);
+                    ExcelWorksheet sheetN = package.Workbook.Worksheets.Copy("Phiếu mẫu", canHo != null ? canHo.Ten : quanLyPhi.NguoiDongPhi + "-T" + quanLyPhi.Thang.ToString());
                     sheetN.Cells[7, 3].Value = quanLyPhi.NguoiDongPhi;
-                    sheetN.Cells[5, 3].Value = "Ngày " + dateTime.Date + " tháng " + dateTime.Month + " năm " + dateTime.Year;
+                    sheetN.Cells[5, 2].Value = "Ngày " + dateTime.Day + " tháng " + dateTime.Month + " năm " + dateTime.Year;
                     sheetN.Cells[5, 9].Value = quanLyPhi.SoPhieu;
-                    sheetN.Cells[8, 3].Value = quanLyPhi.isXeNgoai ? "" : canHo.Ten + " - " + chungcu.Ten;
+                    sheetN.Cells[8, 3].Value = quanLyPhi.isXeNgoai ? "" : canHo != null ? canHo.Ten : quanLyPhi.NguoiDongPhi + " - " + chungcu.Ten;
                     sheetN.Cells[9, 3].Value = quanLyPhi.GhiChu;
                     sheetN.Cells[10, 3].Value = quanLyPhi.TongTien;
-                    sheetN.Cells[11, 3].Value = "Bằng chữ";
+                    sheetN.Cells[11, 3].Value = Dungchung.Capitalize(Dungchung.NumberToText(quanLyPhi.TongTien ?? 0));
                     sheetN.Cells[18, 7].Value = _dbContext.currentUser.TenNhanVien;
                     sheetN.Cells[18, 9].Value = quanLyPhi.NguoiDongPhi;
+
+
+                    sheetN.Cells[34, 3].Value = quanLyPhi.NguoiDongPhi;
+                    sheetN.Cells[32, 2].Value = "Ngày " + dateTime.Day + " tháng " + dateTime.Month + " năm " + dateTime.Year;
+                    sheetN.Cells[32, 9].Value = quanLyPhi.SoPhieu;
+                    sheetN.Cells[35, 3].Value = quanLyPhi.isXeNgoai ? "" : canHo.Ten + " - " + chungcu.Ten;
+                    sheetN.Cells[36, 3].Value = quanLyPhi.GhiChu;
+                    sheetN.Cells[37, 3].Value = quanLyPhi.TongTien;
+                    sheetN.Cells[38, 3].Value = Dungchung.Capitalize(Dungchung.NumberToText(quanLyPhi.TongTien ?? 0));
+                    sheetN.Cells[45, 7].Value = _dbContext.currentUser.TenNhanVien;
+                    sheetN.Cells[45, 9].Value = quanLyPhi.NguoiDongPhi;
                 }
 
                 s.Close();
