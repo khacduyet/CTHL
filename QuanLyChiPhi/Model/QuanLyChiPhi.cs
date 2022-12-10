@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using QuanLyChiPhi.Common;
 using QuanLyChiPhi.Entities;
 using static QuanLyChiPhi.Common.DefineData;
@@ -1901,7 +1902,7 @@ namespace QuanLyChiPhi.Model
                 ExcelWorksheet sheet1 = package.Workbook.Worksheets.First();
                 int nRow = 3;
                 int i = 1;
-
+                double Total = 0;
                 itemTimKiem.DaDongPhi = 2;
                 List<QuanLyPhi> quanLyPhis = GetListQuanLyPhi(itemTimKiem).Data;
                 var loaixes = _dbContext.LoaiXe.ToList();
@@ -1911,7 +1912,7 @@ namespace QuanLyChiPhi.Model
                 {
                     var danhmucs = _dbContext.CanHo.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
                     var ch_pts = _dbContext.CanHo_PhuongTien.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).ToList();
-
+                    sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ CƯ DÂN";
                     foreach (var quanLyPhi in quanLyPhis)
                     {
                         CanHo danhmuc = GetCanHo(quanLyPhi.IdCanHo).Data;
@@ -1975,7 +1976,8 @@ namespace QuanLyChiPhi.Model
                                 sheet1.Cells[nRow + j, 10].Value = quanLyPhi.ListPhi[j].Gia;
                             }
                             sheet1.Cells[nRow, 11].Value = quanLyPhi.TongTien;
-                            sheet1.Cells[nRow, 12].Value = quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản";
+                            Total += quanLyPhi.TongTien ?? 0;
+                            sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai ? quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản" : "";
                             sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
 
                             sheet1.Cells[nRow, 1, nRow + rowMerge - 1, 1].Merge = true;
@@ -2013,7 +2015,8 @@ namespace QuanLyChiPhi.Model
                             }
 
                             sheet1.Cells[nRow, 11].Value = quanLyPhi.TongTien;
-                            sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai && quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản";
+                            Total += quanLyPhi.TongTien ?? 0;
+                            sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai ? quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản" : "";
                             sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
 
                             nRow++;
@@ -2023,10 +2026,11 @@ namespace QuanLyChiPhi.Model
                 }
                 else if (itemTimKiem.LoaiNguoiDung == 2) // Xe ngoài
                 {
+                    sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ XE NGOÀI";
                     var danhmucs = _dbContext.XeNgoai.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
                     foreach (var quanLyPhi in quanLyPhis)
                     {
-                        XeNgoai danhmuc = danhmucs.Find(x => x.Id == quanLyPhi.IdXeNgoai);
+                        XeNgoai danhmuc = GetXeNgoai(quanLyPhi.IdXeNgoai).Data;
                         List<ModelQuanLyPhi> rs = new List<ModelQuanLyPhi>();
                         if (danhmuc != null)
                         {
@@ -2063,12 +2067,22 @@ namespace QuanLyChiPhi.Model
                         }
 
                         sheet1.Cells[nRow, 11].Value = quanLyPhi.TongTien;
-                        sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai && quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản";
+                        Total += quanLyPhi.TongTien ?? 0;
+                        sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai ? quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản" : "";
                         sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
                         nRow++;
                         i++;
                     }
                 }
+
+                sheet1.Cells[nRow, 1].Value = "TỔNG TIỂN";
+                sheet1.Cells[nRow, 11].Value = Total;
+                //sheet1.Cells[nRow, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                sheet1.Cells[nRow, 1].Style.Font.Bold = true;
+                sheet1.Cells[nRow, 1].Style.Font.Size = 14;
+                sheet1.Cells[nRow, 11].Style.Font.Bold = true;
+                sheet1.Cells[nRow, 11].Style.Font.Size = 14;
+                sheet1.Cells[nRow, 1, nRow, 10].Merge = true;
 
                 Dungchung.DrawTableExcel(sheet1, 3, nRow, 1, 13);
                 s.Close();
