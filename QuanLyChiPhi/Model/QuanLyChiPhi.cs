@@ -534,7 +534,7 @@ namespace QuanLyChiPhi.Model
                 (!String.IsNullOrEmpty(x.ChuSoHuu) && x.ChuSoHuu.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim())) ||
                  x.SoDienThoai.ToLower().Trim().Contains(timKiem.Keyword.ToLower().Trim())));
             }
-            msg.Data = data;
+            msg.Data = data.OrderBy(x => x.Ma);
             return msg;
         }
         public ErrorMessage GetCanHo(string Id)
@@ -989,7 +989,7 @@ namespace QuanLyChiPhi.Model
                     item.TenLoaiXe = loaixe.Ten;
                 }
             }
-            msg.Data = data;
+            msg.Data = data.OrderBy(x => x.Ma);
             return msg;
         }
         public ErrorMessage GetXeNgoai(string Id)
@@ -1907,14 +1907,14 @@ namespace QuanLyChiPhi.Model
                 var loaixes = _dbContext.LoaiXe.ToList();
                 var phuongtiens = _dbContext.PhuongTien.ToList();
 
-                if (itemTimKiem.LoaiNguoiDung == 0) // Cư dân
+                if (itemTimKiem.LoaiNguoiDung == 1) // Cư dân
                 {
                     var danhmucs = _dbContext.CanHo.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
                     var ch_pts = _dbContext.CanHo_PhuongTien.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).ToList();
 
                     foreach (var quanLyPhi in quanLyPhis)
                     {
-                        CanHo danhmuc = danhmucs.Find(x => x.Id == quanLyPhi.IdCanHo);
+                        CanHo danhmuc = GetCanHo(quanLyPhi.IdCanHo).Data;
                         List<ModelQuanLyPhi> rs = new List<ModelQuanLyPhi>();
                         if (danhmuc != null)
                         {
@@ -1935,21 +1935,24 @@ namespace QuanLyChiPhi.Model
                                 obj.ThanhTien = obj.SoLuong * obj.Gia;
                                 rs.Add(obj);
                             }
-                            foreach (var item in danhmuc.PhuongTiens)
+                            if (danhmuc.PhuongTiens != null)
                             {
-                                ModelQuanLyPhi obj = new ModelQuanLyPhi();
-                                var loaixe = loaixes.Find(x => x.Id == item.IdLoaiXe);
-                                obj.TenDichVu = item.TenPhuongTien;
-                                obj.PhuongTien = item.TenPhuongTien;
-                                obj.LoaiXe = item.TenLoaiXe;
-                                obj.BienKiemSoat = item.BienKiemSoat;
-                                if (loaixe != null)
+                                foreach (var item in danhmuc.PhuongTiens)
                                 {
-                                    obj.Gia = loaixe.DonGia ?? 0;
+                                    ModelQuanLyPhi obj = new ModelQuanLyPhi();
+                                    var loaixe = loaixes.Find(x => x.Id == item.IdLoaiXe);
+                                    obj.TenDichVu = item.TenPhuongTien;
+                                    obj.PhuongTien = item.TenPhuongTien;
+                                    obj.LoaiXe = item.TenLoaiXe;
+                                    obj.BienKiemSoat = item.BienKiemSoat;
+                                    if (loaixe != null)
+                                    {
+                                        obj.Gia = loaixe.DonGia ?? 0;
+                                    }
+                                    obj.SoLuong = 1;
+                                    obj.ThanhTien = obj.SoLuong * obj.Gia;
+                                    rs.Add(obj);
                                 }
-                                obj.SoLuong = 1;
-                                obj.ThanhTien = obj.SoLuong * obj.Gia;
-                                rs.Add(obj);
                             }
                         }
                         quanLyPhi.ListPhi = rs;
@@ -2010,7 +2013,7 @@ namespace QuanLyChiPhi.Model
                             }
 
                             sheet1.Cells[nRow, 11].Value = quanLyPhi.TongTien;
-                            sheet1.Cells[nRow, 12].Value = quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản";
+                            sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai && quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản";
                             sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
 
                             nRow++;
@@ -2018,7 +2021,7 @@ namespace QuanLyChiPhi.Model
                         }
                     }
                 }
-                else if (itemTimKiem.LoaiNguoiDung == 1) // Xe ngoài
+                else if (itemTimKiem.LoaiNguoiDung == 2) // Xe ngoài
                 {
                     var danhmucs = _dbContext.XeNgoai.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
                     foreach (var quanLyPhi in quanLyPhis)
@@ -2060,7 +2063,7 @@ namespace QuanLyChiPhi.Model
                         }
 
                         sheet1.Cells[nRow, 11].Value = quanLyPhi.TongTien;
-                        sheet1.Cells[nRow, 12].Value = quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản";
+                        sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai && quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản";
                         sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
                         nRow++;
                         i++;
