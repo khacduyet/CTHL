@@ -1888,169 +1888,102 @@ namespace QuanLyChiPhi.Model
         }
 
         // Xuất file excel phiếu thu
-        public ErrorMessage ExportPhieuThu(TimKiemPhieu itemTimKiem)
+        public void ExportGeneral(TimKiemPhieu itemTimKiem, List<QuanLyPhi> quanLyPhis, List<LoaiXe> loaixes, ExcelWorksheet sheet1)
         {
-            ErrorMessage err = new ErrorMessage(ErrorMessage.eState.ImportDuLieuThanhCong);
-            try
+            int nRow = 3;
+            int i = 1;
+            double Total = 0;
+            if (itemTimKiem.LoaiNguoiDung == 1) // Cư dân
             {
-                string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "TongHopPhieuThu.xlsx");
-                DateTime dt = DateTime.Now;
-                string sFileNameCopy = _appSettings.DuongDanUpload + "TongHopPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
-                File.Copy(sFileName, sFileNameCopy, true);
-                Stream s = File.OpenRead(sFileNameCopy);
-                ExcelPackage package = new ExcelPackage(s);
-                ExcelWorksheet sheet1 = package.Workbook.Worksheets.First();
-                int nRow = 3;
-                int i = 1;
-                double Total = 0;
-                itemTimKiem.DaDongPhi = 2;
-                List<QuanLyPhi> quanLyPhis = GetListQuanLyPhi(itemTimKiem).Data;
-                var loaixes = _dbContext.LoaiXe.ToList();
-                var phuongtiens = _dbContext.PhuongTien.ToList();
-
-                if (itemTimKiem.LoaiNguoiDung == 1) // Cư dân
+                var danhmucs = _dbContext.CanHo.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
+                var ch_pts = _dbContext.CanHo_PhuongTien.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).ToList();
+                sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ CƯ DÂN";
+                foreach (var quanLyPhi in quanLyPhis)
                 {
-                    var danhmucs = _dbContext.CanHo.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
-                    var ch_pts = _dbContext.CanHo_PhuongTien.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).ToList();
-                    sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ CƯ DÂN";
-                    foreach (var quanLyPhi in quanLyPhis)
+                    CanHo danhmuc = GetCanHo(quanLyPhi.IdCanHo).Data;
+                    List<ModelQuanLyPhi> rs = new List<ModelQuanLyPhi>();
+                    if (danhmuc != null)
                     {
-                        CanHo danhmuc = GetCanHo(quanLyPhi.IdCanHo).Data;
-                        List<ModelQuanLyPhi> rs = new List<ModelQuanLyPhi>();
-                        if (danhmuc != null)
+                        var LoaiDichVus = _dbContext.LoaiDichVu.Where(x => x.TrangThai).ToList();
+                        foreach (var item in LoaiDichVus)
                         {
-                            var LoaiDichVus = _dbContext.LoaiDichVu.Where(x => x.TrangThai).ToList();
-                            foreach (var item in LoaiDichVus)
-                            {
-                                ModelQuanLyPhi obj = new ModelQuanLyPhi();
-                                var loaidichvu = LoaiDichVus.Find(x => x.Id == item.Id && x.TrangThai);
-                                if (loaidichvu != null)
-                                {
-                                    obj.TenDichVu = loaidichvu.Ten;
-                                    obj.Gia = loaidichvu.DonGia ?? 0;
-                                }
-                                obj.PhuongTien = "-";
-                                obj.LoaiXe = "-";
-                                obj.BienKiemSoat = "-";
-                                obj.SoLuong = danhmuc.DienTich ?? 1;
-                                obj.ThanhTien = obj.SoLuong * obj.Gia;
-                                rs.Add(obj);
-                            }
-                            if (danhmuc.PhuongTiens != null)
-                            {
-                                foreach (var item in danhmuc.PhuongTiens)
-                                {
-                                    ModelQuanLyPhi obj = new ModelQuanLyPhi();
-                                    var loaixe = loaixes.Find(x => x.Id == item.IdLoaiXe);
-                                    obj.TenDichVu = item.TenPhuongTien;
-                                    obj.PhuongTien = item.TenPhuongTien;
-                                    obj.LoaiXe = item.TenLoaiXe;
-                                    obj.BienKiemSoat = item.BienKiemSoat;
-                                    if (loaixe != null)
-                                    {
-                                        obj.Gia = loaixe.DonGia ?? 0;
-                                    }
-                                    obj.SoLuong = 1;
-                                    obj.ThanhTien = obj.SoLuong * obj.Gia;
-                                    rs.Add(obj);
-                                }
-                            }
-                        }
-                        quanLyPhi.ListPhi = rs;
-
-                        if (quanLyPhi.ListPhi.Count > 1)
-                        {
-                            int rowMerge = quanLyPhi.ListPhi.Count;
-                            sheet1.Cells[nRow, 1].Value = i;
-                            sheet1.Cells[nRow, 2].Value = quanLyPhi.SoPhieu;
-                            sheet1.Cells[nRow, 3].Value = quanLyPhi.NguoiDongPhi;
-                            sheet1.Cells[nRow, 4].Value = quanLyPhi.SoDienThoai;
-
-                            for (int j = 0; j < rowMerge; j++)
-                            {
-                                sheet1.Cells[nRow + j, 5].Value = quanLyPhi.ListPhi[j].TenDichVu;
-                                sheet1.Cells[nRow + j, 6].Value = quanLyPhi.ListPhi[j].PhuongTien;
-                                sheet1.Cells[nRow + j, 7].Value = quanLyPhi.ListPhi[j].LoaiXe;
-                                sheet1.Cells[nRow + j, 8].Value = quanLyPhi.ListPhi[j].BienKiemSoat;
-                                sheet1.Cells[nRow + j, 9].Value = quanLyPhi.ListPhi[j].SoLuong;
-                                sheet1.Cells[nRow + j, 10].Value = quanLyPhi.ListPhi[j].Gia;
-                            }
-                            sheet1.Cells[nRow, 11].Value = quanLyPhi.TongTien;
-                            Total += quanLyPhi.TongTien ?? 0;
-                            sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai ? quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản" : "";
-                            sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
-
-                            sheet1.Cells[nRow, 1, nRow + rowMerge - 1, 1].Merge = true;
-                            sheet1.Cells[nRow, 2, nRow + rowMerge - 1, 2].Merge = true;
-                            sheet1.Cells[nRow, 3, nRow + rowMerge - 1, 3].Merge = true;
-                            sheet1.Cells[nRow, 4, nRow + rowMerge - 1, 4].Merge = true;
-                            sheet1.Cells[nRow, 11, nRow + rowMerge - 1, 11].Merge = true;
-                            sheet1.Cells[nRow, 12, nRow + rowMerge - 1, 12].Merge = true;
-                            sheet1.Cells[nRow, 13, nRow + rowMerge - 1, 13].Merge = true;
-                            if (quanLyPhi.ListPhi.Count == 0)
-                            {
-                                nRow++;
-                            }
-                            else
-                            {
-                                nRow += quanLyPhi.ListPhi.Count;
-                            }
-                            i++;
-                        }
-                        else
-                        {
-                            sheet1.Cells[nRow, 1].Value = i;
-                            sheet1.Cells[nRow, 2].Value = quanLyPhi.SoPhieu;
-                            sheet1.Cells[nRow, 3].Value = quanLyPhi.NguoiDongPhi;
-                            sheet1.Cells[nRow, 4].Value = quanLyPhi.SoDienThoai;
-
-                            if (quanLyPhi.ListPhi.Count > 0)
-                            {
-                                sheet1.Cells[nRow, 5].Value = quanLyPhi.ListPhi[0].TenDichVu;
-                                sheet1.Cells[nRow, 6].Value = quanLyPhi.ListPhi[0].PhuongTien;
-                                sheet1.Cells[nRow, 7].Value = quanLyPhi.ListPhi[0].LoaiXe;
-                                sheet1.Cells[nRow, 8].Value = quanLyPhi.ListPhi[0].BienKiemSoat;
-                                sheet1.Cells[nRow, 9].Value = quanLyPhi.ListPhi[0].SoLuong;
-                                sheet1.Cells[nRow, 10].Value = quanLyPhi.ListPhi[0].Gia;
-                            }
-
-                            sheet1.Cells[nRow, 11].Value = quanLyPhi.TongTien;
-                            Total += quanLyPhi.TongTien ?? 0;
-                            sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai ? quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản" : "";
-                            sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
-
-                            nRow++;
-                            i++;
-                        }
-                    }
-                }
-                else if (itemTimKiem.LoaiNguoiDung == 2) // Xe ngoài
-                {
-                    sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ XE NGOÀI";
-                    var danhmucs = _dbContext.XeNgoai.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
-                    foreach (var quanLyPhi in quanLyPhis)
-                    {
-                        XeNgoai danhmuc = GetXeNgoai(quanLyPhi.IdXeNgoai).Data;
-                        List<ModelQuanLyPhi> rs = new List<ModelQuanLyPhi>();
-                        if (danhmuc != null)
-                        {
-                            var LoaiDichVus = _dbContext.LoaiDichVu.Where(x => x.TrangThai).ToList();
                             ModelQuanLyPhi obj = new ModelQuanLyPhi();
-                            var loaixe = loaixes.Find(x => x.Id == danhmuc.IdLoaiXe);
-                            obj.TenDichVu = danhmuc.TenPhuongTien;
-                            obj.PhuongTien = danhmuc.TenPhuongTien;
-                            obj.LoaiXe = danhmuc.TenLoaiXe;
-                            obj.BienKiemSoat = danhmuc.BienKiemSoat;
-                            if (loaixe != null)
+                            var loaidichvu = LoaiDichVus.Find(x => x.Id == item.Id && x.TrangThai);
+                            if (loaidichvu != null)
                             {
-                                obj.Gia = loaixe.DonGia ?? 0;
+                                obj.TenDichVu = loaidichvu.Ten;
+                                obj.Gia = loaidichvu.DonGia ?? 0;
                             }
-                            obj.SoLuong = 1;
+                            obj.PhuongTien = "-";
+                            obj.LoaiXe = "-";
+                            obj.BienKiemSoat = "-";
+                            obj.SoLuong = danhmuc.DienTich ?? 1;
                             obj.ThanhTien = obj.SoLuong * obj.Gia;
                             rs.Add(obj);
                         }
-                        quanLyPhi.ListPhi = rs;
+                        if (danhmuc.PhuongTiens != null)
+                        {
+                            foreach (var item in danhmuc.PhuongTiens)
+                            {
+                                ModelQuanLyPhi obj = new ModelQuanLyPhi();
+                                var loaixe = loaixes.Find(x => x.Id == item.IdLoaiXe);
+                                obj.TenDichVu = item.TenPhuongTien;
+                                obj.PhuongTien = item.TenPhuongTien;
+                                obj.LoaiXe = item.TenLoaiXe;
+                                obj.BienKiemSoat = item.BienKiemSoat;
+                                if (loaixe != null)
+                                {
+                                    obj.Gia = loaixe.DonGia ?? 0;
+                                }
+                                obj.SoLuong = 1;
+                                obj.ThanhTien = obj.SoLuong * obj.Gia;
+                                rs.Add(obj);
+                            }
+                        }
+                    }
+                    quanLyPhi.ListPhi = rs;
 
+                    if (quanLyPhi.ListPhi.Count > 1)
+                    {
+                        int rowMerge = quanLyPhi.ListPhi.Count;
+                        sheet1.Cells[nRow, 1].Value = i;
+                        sheet1.Cells[nRow, 2].Value = quanLyPhi.SoPhieu;
+                        sheet1.Cells[nRow, 3].Value = quanLyPhi.NguoiDongPhi;
+                        sheet1.Cells[nRow, 4].Value = quanLyPhi.SoDienThoai;
+
+                        for (int j = 0; j < rowMerge; j++)
+                        {
+                            sheet1.Cells[nRow + j, 5].Value = quanLyPhi.ListPhi[j].TenDichVu;
+                            sheet1.Cells[nRow + j, 6].Value = quanLyPhi.ListPhi[j].PhuongTien;
+                            sheet1.Cells[nRow + j, 7].Value = quanLyPhi.ListPhi[j].LoaiXe;
+                            sheet1.Cells[nRow + j, 8].Value = quanLyPhi.ListPhi[j].BienKiemSoat;
+                            sheet1.Cells[nRow + j, 9].Value = quanLyPhi.ListPhi[j].SoLuong;
+                            sheet1.Cells[nRow + j, 10].Value = quanLyPhi.ListPhi[j].Gia;
+                        }
+                        sheet1.Cells[nRow, 11].Value = quanLyPhi.TongTien;
+                        Total += quanLyPhi.TongTien ?? 0;
+                        sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai ? quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản" : "";
+                        sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
+
+                        sheet1.Cells[nRow, 1, nRow + rowMerge - 1, 1].Merge = true;
+                        sheet1.Cells[nRow, 2, nRow + rowMerge - 1, 2].Merge = true;
+                        sheet1.Cells[nRow, 3, nRow + rowMerge - 1, 3].Merge = true;
+                        sheet1.Cells[nRow, 4, nRow + rowMerge - 1, 4].Merge = true;
+                        sheet1.Cells[nRow, 11, nRow + rowMerge - 1, 11].Merge = true;
+                        sheet1.Cells[nRow, 12, nRow + rowMerge - 1, 12].Merge = true;
+                        sheet1.Cells[nRow, 13, nRow + rowMerge - 1, 13].Merge = true;
+                        if (quanLyPhi.ListPhi.Count == 0)
+                        {
+                            nRow++;
+                        }
+                        else
+                        {
+                            nRow += quanLyPhi.ListPhi.Count;
+                        }
+                        i++;
+                    }
+                    else
+                    {
                         sheet1.Cells[nRow, 1].Value = i;
                         sheet1.Cells[nRow, 2].Value = quanLyPhi.SoPhieu;
                         sheet1.Cells[nRow, 3].Value = quanLyPhi.NguoiDongPhi;
@@ -2070,23 +2003,97 @@ namespace QuanLyChiPhi.Model
                         Total += quanLyPhi.TongTien ?? 0;
                         sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai ? quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản" : "";
                         sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
+
                         nRow++;
                         i++;
                     }
                 }
+            }
+            else if (itemTimKiem.LoaiNguoiDung == 2) // Xe ngoài
+            {
+                sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ XE NGOÀI";
+                var danhmucs = _dbContext.XeNgoai.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
+                foreach (var quanLyPhi in quanLyPhis)
+                {
+                    XeNgoai danhmuc = GetXeNgoai(quanLyPhi.IdXeNgoai).Data;
+                    List<ModelQuanLyPhi> rs = new List<ModelQuanLyPhi>();
+                    if (danhmuc != null)
+                    {
+                        var LoaiDichVus = _dbContext.LoaiDichVu.Where(x => x.TrangThai).ToList();
+                        ModelQuanLyPhi obj = new ModelQuanLyPhi();
+                        var loaixe = loaixes.Find(x => x.Id == danhmuc.IdLoaiXe);
+                        obj.TenDichVu = danhmuc.TenPhuongTien;
+                        obj.PhuongTien = danhmuc.TenPhuongTien;
+                        obj.LoaiXe = danhmuc.TenLoaiXe;
+                        obj.BienKiemSoat = danhmuc.BienKiemSoat;
+                        if (loaixe != null)
+                        {
+                            obj.Gia = loaixe.DonGia ?? 0;
+                        }
+                        obj.SoLuong = 1;
+                        obj.ThanhTien = obj.SoLuong * obj.Gia;
+                        rs.Add(obj);
+                    }
+                    quanLyPhi.ListPhi = rs;
 
-                sheet1.Cells[nRow, 1].Value = "TỔNG TIỂN";
-                sheet1.Cells[nRow, 11].Value = Total;
-                //sheet1.Cells[nRow, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                sheet1.Cells[nRow, 1].Style.Font.Bold = true;
-                sheet1.Cells[nRow, 1].Style.Font.Size = 14;
-                sheet1.Cells[nRow, 11].Style.Font.Bold = true;
-                sheet1.Cells[nRow, 11].Style.Font.Size = 14;
-                sheet1.Cells[nRow, 1, nRow, 10].Merge = true;
+                    sheet1.Cells[nRow, 1].Value = i;
+                    sheet1.Cells[nRow, 2].Value = quanLyPhi.SoPhieu;
+                    sheet1.Cells[nRow, 3].Value = quanLyPhi.NguoiDongPhi;
+                    sheet1.Cells[nRow, 4].Value = quanLyPhi.SoDienThoai;
 
-                Dungchung.DrawTableExcel(sheet1, 3, nRow, 1, 13);
+                    if (quanLyPhi.ListPhi.Count > 0)
+                    {
+                        sheet1.Cells[nRow, 5].Value = quanLyPhi.ListPhi[0].TenDichVu;
+                        sheet1.Cells[nRow, 6].Value = quanLyPhi.ListPhi[0].PhuongTien;
+                        sheet1.Cells[nRow, 7].Value = quanLyPhi.ListPhi[0].LoaiXe;
+                        sheet1.Cells[nRow, 8].Value = quanLyPhi.ListPhi[0].BienKiemSoat;
+                        sheet1.Cells[nRow, 9].Value = quanLyPhi.ListPhi[0].SoLuong;
+                        sheet1.Cells[nRow, 10].Value = quanLyPhi.ListPhi[0].Gia;
+                    }
+
+                    sheet1.Cells[nRow, 11].Value = quanLyPhi.TongTien;
+                    Total += quanLyPhi.TongTien ?? 0;
+                    sheet1.Cells[nRow, 12].Value = quanLyPhi.TrangThai ? quanLyPhi.Pay == "TIENMAT" ? "Tiền mặt" : "Chuyển khoản" : "";
+                    sheet1.Cells[nRow, 13].Value = quanLyPhi.TrangThai ? quanLyPhi.ModifiedByName : "";
+                    nRow++;
+                    i++;
+                }
+            }
+            sheet1.Cells[nRow, 1].Value = "TỔNG TIỂN";
+            sheet1.Cells[nRow, 11].Value = Total;
+            //sheet1.Cells[nRow, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            sheet1.Cells[nRow, 1].Style.Font.Bold = true;
+            sheet1.Cells[nRow, 1].Style.Font.Size = 14;
+            sheet1.Cells[nRow, 11].Style.Font.Bold = true;
+            sheet1.Cells[nRow, 11].Style.Font.Size = 14;
+            sheet1.Cells[nRow, 1, nRow, 10].Merge = true;
+            Dungchung.DrawTableExcel(sheet1, 3, nRow, 1, 13);
+        }
+        public ErrorMessage ExportPhieuThu(TimKiemPhieu itemTimKiem)
+        {
+            ErrorMessage err = new ErrorMessage(ErrorMessage.eState.ImportDuLieuThanhCong);
+            try
+            {
+                string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "TongHopPhieuThu.xlsx");
+                DateTime dt = DateTime.Now;
+                string sFileNameCopy = _appSettings.DuongDanUpload + "TongHopPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
+                File.Copy(sFileName, sFileNameCopy, true);
+                Stream s = File.OpenRead(sFileNameCopy);
+                ExcelPackage package = new ExcelPackage(s);
+                ExcelWorksheet sheet1 = package.Workbook.Worksheets["Tổng hợp"];
+                ExcelWorksheet sheetDD = package.Workbook.Worksheets["Đã đóng"];
+                ExcelWorksheet sheetCD = package.Workbook.Worksheets["Chưa đóng"];
+                
+                itemTimKiem.DaDongPhi = 2;
+                List<QuanLyPhi> quanLyPhis = GetListQuanLyPhi(itemTimKiem).Data;
+                List<QuanLyPhi> quanLyPhiDD = quanLyPhis.FindAll(x=>x.TrangThai);
+                List<QuanLyPhi> quanLyPhiCD = quanLyPhis.FindAll(x=>!x.TrangThai);
+                var loaixes = _dbContext.LoaiXe.ToList();
+                ExportGeneral(itemTimKiem, quanLyPhis, loaixes, sheet1);
+                ExportGeneral(itemTimKiem, quanLyPhiDD, loaixes, sheetDD);
+                ExportGeneral(itemTimKiem, quanLyPhiCD, loaixes, sheetCD);
+                
                 s.Close();
-
                 byte[] bytee = package.GetAsByteArray();
                 File.WriteAllBytes(sFileNameCopy, bytee);
                 err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("TongHopPhieuThu.xlsx")
