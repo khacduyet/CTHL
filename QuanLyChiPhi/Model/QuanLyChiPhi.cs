@@ -1897,7 +1897,7 @@ namespace QuanLyChiPhi.Model
             {
                 var danhmucs = _dbContext.CanHo.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
                 var ch_pts = _dbContext.CanHo_PhuongTien.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).ToList();
-                sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ CƯ DÂN";
+                sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ CƯ DÂN" + (itemTimKiem.Thang != 0 ? " THÁNG " + itemTimKiem.Thang + "/" + DateTime.Now.Year : "");
                 foreach (var quanLyPhi in quanLyPhis)
                 {
                     CanHo danhmuc = GetCanHo(quanLyPhi.IdCanHo).Data;
@@ -2011,7 +2011,7 @@ namespace QuanLyChiPhi.Model
             }
             else if (itemTimKiem.LoaiNguoiDung == 2) // Xe ngoài
             {
-                sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ XE NGOÀI";
+                sheet1.Cells[1, 1].Value = "DANH SÁCH THU PHÍ XE NGOÀI" + (itemTimKiem.Thang != 0 ? " THÁNG " + itemTimKiem.Thang + "/" + DateTime.Now.Year : "");
                 var danhmucs = _dbContext.XeNgoai.Where(x => x.IdChungCu == itemTimKiem.IdChungCu).OrderBy(x => x.Ma).ToList();
                 foreach (var quanLyPhi in quanLyPhis)
                 {
@@ -2083,16 +2083,16 @@ namespace QuanLyChiPhi.Model
                 ExcelWorksheet sheet1 = package.Workbook.Worksheets["Tổng hợp"];
                 ExcelWorksheet sheetDD = package.Workbook.Worksheets["Đã đóng"];
                 ExcelWorksheet sheetCD = package.Workbook.Worksheets["Chưa đóng"];
-                
+
                 itemTimKiem.DaDongPhi = 2;
                 List<QuanLyPhi> quanLyPhis = GetListQuanLyPhi(itemTimKiem).Data;
-                List<QuanLyPhi> quanLyPhiDD = quanLyPhis.FindAll(x=>x.TrangThai);
-                List<QuanLyPhi> quanLyPhiCD = quanLyPhis.FindAll(x=>!x.TrangThai);
+                List<QuanLyPhi> quanLyPhiDD = quanLyPhis.FindAll(x => x.TrangThai);
+                List<QuanLyPhi> quanLyPhiCD = quanLyPhis.FindAll(x => !x.TrangThai);
                 var loaixes = _dbContext.LoaiXe.ToList();
                 ExportGeneral(itemTimKiem, quanLyPhis, loaixes, sheet1);
                 ExportGeneral(itemTimKiem, quanLyPhiDD, loaixes, sheetDD);
                 ExportGeneral(itemTimKiem, quanLyPhiCD, loaixes, sheetCD);
-                
+
                 s.Close();
                 byte[] bytee = package.GetAsByteArray();
                 File.WriteAllBytes(sFileNameCopy, bytee);
@@ -2189,7 +2189,7 @@ namespace QuanLyChiPhi.Model
                 foreach (var quanLyPhi in quanLyPhis)
                 {
                     CanHo canHo = canHos.Find(x => x.Id == quanLyPhi.IdCanHo);
-                    ExcelWorksheet sheetN = package.Workbook.Worksheets.Copy("Phiếu mẫu", canHo != null ? canHo.Ten : quanLyPhi.NguoiDongPhi + "-T" + quanLyPhi.Thang.ToString());
+                    ExcelWorksheet sheetN = package.Workbook.Worksheets.Copy("Phiếu mẫu", canHo != null ? canHo.Ten + "-T" + quanLyPhi.Thang.ToString() : quanLyPhi.NguoiDongPhi + "-T" + quanLyPhi.Thang.ToString());
                     sheetN.Cells[7, 3].Value = quanLyPhi.NguoiDongPhi;
                     sheetN.Cells[5, 2].Value = "Ngày " + dateTime.Day + " tháng " + dateTime.Month + " năm " + dateTime.Year;
                     sheetN.Cells[5, 9].Value = quanLyPhi.SoPhieu;
