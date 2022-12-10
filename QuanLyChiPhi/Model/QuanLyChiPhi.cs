@@ -2142,6 +2142,7 @@ namespace QuanLyChiPhi.Model
                 sheet1.Cells[38, 3].Value = Dungchung.Capitalize(Dungchung.NumberToText(quanLyPhi.TongTien ?? 0));
                 sheet1.Cells[45, 7].Value = _dbContext.currentUser.TenNhanVien;
                 sheet1.Cells[45, 9].Value = quanLyPhi.NguoiDongPhi;
+                package.Workbook.Worksheets[2].Select();
                 s.Close();
 
                 byte[] bytee = package.GetAsByteArray();
@@ -2168,7 +2169,6 @@ namespace QuanLyChiPhi.Model
                 File.Copy(sFileName, sFileNameCopy, true);
                 Stream s = File.OpenRead(sFileNameCopy);
                 ExcelPackage package = new ExcelPackage(s);
-                ExcelWorksheet sheet1 = package.Workbook.Worksheets["Phiếu mẫu"];
 
                 itemTimKiem.DaDongPhi = 0;
                 List<QuanLyPhi> quanLyPhis = GetListQuanLyPhi(itemTimKiem).Data;
@@ -2204,7 +2204,7 @@ namespace QuanLyChiPhi.Model
                     sheetN.Cells[45, 7].Value = _dbContext.currentUser.TenNhanVien;
                     sheetN.Cells[45, 9].Value = quanLyPhi.NguoiDongPhi;
                 }
-
+                package.Workbook.Worksheets[2].Select();
                 s.Close();
 
                 byte[] bytee = package.GetAsByteArray();
