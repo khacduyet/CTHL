@@ -29,5 +29,27 @@ namespace QuanLyChiPhi.Controllers
         //    }
         //    return Ok("Tải lên thành công!");
         //}
+        [HttpGet("DownloadFile")]
+        public IActionResult DownloadFile(string FileName)
+        {
+            var memory = DownloadSinghFile(FileName, @"C:\uploader\App_Data\uploads\");
+            return File(memory.ToArray(), "application/*", FileName);
+        }
+
+        private MemoryStream DownloadSinghFile(string filename, string uploadPath)
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), uploadPath, filename);
+            var memory = new MemoryStream();
+            if (System.IO.File.Exists(path))
+            {
+                var net = new System.Net.WebClient();
+                var data = net.DownloadData(path);
+                var content = new System.IO.MemoryStream(data);
+                memory = content;
+            }
+            memory.Position = 0;
+            return memory;
+        }
     }
+
 }

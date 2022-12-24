@@ -3,4 +3,8 @@
 https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\Admin\OneDrive\Máy tính\BM</_PublishTargetUrl>
+    <History>True|2022-12-24T10:27:11.7274189Z;True|2022-12-24T17:21:28.6360010+07:00;True|2022-12-24T15:59:43.1113940+07:00;True|2022-12-17T21:13:06.9088734+07:00;True|2022-12-10T21:12:32.5985485+07:00;True|2022-12-10T21:08:24.0678578+07:00;</History>
+  </PropertyGroup>
 </Project>

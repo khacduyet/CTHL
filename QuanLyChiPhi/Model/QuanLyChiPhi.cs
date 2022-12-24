@@ -834,6 +834,7 @@ namespace QuanLyChiPhi.Model
                 string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "CuDan.xlsx");
                 DateTime dt = DateTime.Now;
                 string sFileNameCopy = _appSettings.DuongDanUpload + "CuDanDownload_" + dt.ToOADate() + ".xlsx";
+                string cFileName = "CuDanDownload_" + dt.ToOADate() + ".xlsx";
                 File.Copy(sFileName, sFileNameCopy, true);
                 Stream s = File.OpenRead(sFileNameCopy);
                 ExcelPackage package = new ExcelPackage(s);
@@ -932,8 +933,7 @@ namespace QuanLyChiPhi.Model
 
                 byte[] bytee = package.GetAsByteArray();
                 File.WriteAllBytes(sFileNameCopy, bytee);
-                err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("CuDan.xlsx")
-                                + "&path=" + Dungchung.Base64Encode(sFileNameCopy);
+                err.Data = "/FileUploader/DownloadFile?FileName=" + cFileName;
                 return err;
             }
             catch (Exception e)
@@ -1180,6 +1180,7 @@ namespace QuanLyChiPhi.Model
                 string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "XeNgoai.xlsx");
                 DateTime dt = DateTime.Now;
                 string sFileNameCopy = _appSettings.DuongDanUpload + "XeNgoaiDownload_" + dt.ToOADate() + ".xlsx";
+                string cFileName = "XeNgoaiDownload_" + dt.ToOADate() + ".xlsx";
                 File.Copy(sFileName, sFileNameCopy, true);
                 Stream s = File.OpenRead(sFileNameCopy);
                 ExcelPackage package = new ExcelPackage(s);
@@ -1233,8 +1234,7 @@ namespace QuanLyChiPhi.Model
 
                 byte[] bytee = package.GetAsByteArray();
                 File.WriteAllBytes(sFileNameCopy, bytee);
-                err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("XeNgoai.xlsx")
-                                + "&path=" + Dungchung.Base64Encode(sFileNameCopy);
+                err.Data = "/FileUploader/DownloadFile?FileName=" + cFileName;
                 return err;
             }
             catch (Exception e)
@@ -2077,6 +2077,7 @@ namespace QuanLyChiPhi.Model
                 string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "TongHopPhieuThu.xlsx");
                 DateTime dt = DateTime.Now;
                 string sFileNameCopy = _appSettings.DuongDanUpload + "TongHopPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
+                string cFileName = "TongHopPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
                 File.Copy(sFileName, sFileNameCopy, true);
                 Stream s = File.OpenRead(sFileNameCopy);
                 ExcelPackage package = new ExcelPackage(s);
@@ -2096,8 +2097,7 @@ namespace QuanLyChiPhi.Model
                 s.Close();
                 byte[] bytee = package.GetAsByteArray();
                 File.WriteAllBytes(sFileNameCopy, bytee);
-                err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("TongHopPhieuThu.xlsx")
-                                + "&path=" + Dungchung.Base64Encode(sFileNameCopy);
+                err.Data = "/FileUploader/DownloadFile?FileName=" + cFileName;
                 return err;
             }
             catch (Exception e)
@@ -2116,6 +2116,7 @@ namespace QuanLyChiPhi.Model
                 string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "MauPhieuThu.xlsx");
                 DateTime dt = DateTime.Now;
                 string sFileNameCopy = _appSettings.DuongDanUpload + "MauPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
+                string cFileName = "MauPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
                 File.Copy(sFileName, sFileNameCopy, true);
                 Stream s = File.OpenRead(sFileNameCopy);
                 ExcelPackage package = new ExcelPackage(s);
@@ -2154,8 +2155,7 @@ namespace QuanLyChiPhi.Model
 
                 byte[] bytee = package.GetAsByteArray();
                 File.WriteAllBytes(sFileNameCopy, bytee);
-                err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("MauPhieuThu.xlsx")
-                                + "&path=" + Dungchung.Base64Encode(sFileNameCopy);
+                err.Data = "/FileUploader/DownloadFile?FileName=" + cFileName;
                 return err;
             }
             catch (Exception e)
@@ -2173,6 +2173,7 @@ namespace QuanLyChiPhi.Model
                 string sFileName = Path.Combine(Directory.GetCurrentDirectory(), "MauBaoCao/" + "MauPhieuThu.xlsx");
                 DateTime dt = DateTime.Now;
                 string sFileNameCopy = _appSettings.DuongDanUpload + "MauPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
+                string cFileName = "MauPhieuThuDownload_" + dt.ToOADate() + ".xlsx";
                 File.Copy(sFileName, sFileNameCopy, true);
                 Stream s = File.OpenRead(sFileNameCopy);
                 ExcelPackage package = new ExcelPackage(s);
@@ -2216,8 +2217,7 @@ namespace QuanLyChiPhi.Model
 
                 byte[] bytee = package.GetAsByteArray();
                 File.WriteAllBytes(sFileNameCopy, bytee);
-                err.Data = "/uploader/DownloadFile?filename=" + Dungchung.Base64Encode("MauPhieuThu.xlsx")
-                                + "&path=" + Dungchung.Base64Encode(sFileNameCopy);
+                err.Data = "/FileUploader/DownloadFile?FileName=" + cFileName;
                 return err;
             }
             catch (Exception e)

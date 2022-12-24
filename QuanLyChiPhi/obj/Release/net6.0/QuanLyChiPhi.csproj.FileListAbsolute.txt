@@ -67,3 +67,4 @@ C:\Users\Admin\OneDrive\Máy tính\tic\QuanLyChiPhi\obj\Release\net6.0\refint\Qu
 C:\Users\Admin\OneDrive\Máy tính\tic\QuanLyChiPhi\obj\Release\net6.0\QuanLyChiPhi.pdb
 C:\Users\Admin\OneDrive\Máy tính\tic\QuanLyChiPhi\obj\Release\net6.0\QuanLyChiPhi.genruntimeconfig.cache
 C:\Users\Admin\OneDrive\Máy tính\tic\QuanLyChiPhi\obj\Release\net6.0\ref\QuanLyChiPhi.dll
+C:\Users\Admin\OneDrive\Máy tính\tic\QuanLyChiPhi\bin\Release\net6.0\MimeMapping.dll
